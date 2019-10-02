@@ -1,5 +1,7 @@
 #include "sdl.h"
 #include <glad\glad.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\matrix_transform.hpp>
 
 const GLfloat positions[] =
 {
@@ -91,11 +93,12 @@ int main(int argc, char** argv)
 	const char* vertex_source = "#version 430 \n \
 	in vec3 vposition; \n \
 	in vec3 vcolor; \n \
+	uniform mat4 mx; \
 	out vec3 fcolor; \n \
 	void main() \n \
 	{ \n \
 		fcolor = vcolor; \n \
-		gl_Position = vec4(vposition, 1.0); \n \
+		gl_Position = mx * vec4(vposition, 1.0); \n \
 	}";
 
 	GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -132,6 +135,12 @@ int main(int argc, char** argv)
 	glLinkProgram(shader_program);
 	glUseProgram(shader_program);
 
+	glm::mat4 mx = glm::mat4(1.0f);
+	mx = glm::rotate(mx, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	GLint uniform = glGetUniformLocation(shader_program, "mx");
+	glUniformMatrix4fv(uniform, 1, GL_FALSE, &mx[0][0]);
+
 	bool quit = false;
 	while (!quit)
 	{
@@ -151,6 +160,10 @@ int main(int argc, char** argv)
 		}
 
 		SDL_PumpEvents();
+
+		mx = glm::rotate(mx, glm::radians(2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		GLint uniform = glGetUniformLocation(shader_program, "mx");
+		glUniformMatrix4fv(uniform, 1, GL_FALSE, &mx[0][0]);
 
 		glClearColor(0.85f, 0.85f, 0.85f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
