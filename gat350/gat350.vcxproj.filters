@@ -5,6 +5,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="source\core">
+      <UniqueIdentifier>{e49cc0c8-cf9d-430b-ab49-f897a1f5e210}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -13,5 +16,85 @@
     <ClCompile Include="..\external\glad\src\glad.c">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="core\assert.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\filesystem.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\heap.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\json.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\memory.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\name.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\random.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\string.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\timer.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="core\assert.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\core.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\filesystem.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\handle.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\heap.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\json.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\memory.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\name.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\pool_allocator.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\random.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ref_count.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ref_ptr.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\reflection.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\smart_ptr.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\string.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\timer.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\types.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
