@@ -1,9 +1,10 @@
-#include "core\core.h"
+#include "engine/renderer/program.h"
+#include "core/core.h"
 
 #include <sdl.h>
-#include <glad\glad.h>
-#include <glm\glm.hpp>
-#include <glm\gtc\matrix_transform.hpp>
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 const GLfloat positions[] =
 {
@@ -33,6 +34,8 @@ const GLuint indices[] = {
 
 int main(int argc, char** argv)
 {
+	filesystem::set_current_path("content");
+
 	int result = SDL_Init(SDL_INIT_VIDEO);
 	if (result != 0)
 	{
@@ -91,45 +94,26 @@ int main(int argc, char** argv)
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_vbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLubyte*)NULL);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLubyte*)(3 * sizeof(GLfloat)));
+	
+	//Program program;
+	//program.CompileShaderFromFile("content/shaders/basic.vs", GL_VERTEX_SHADER);
+	//program.CompileShaderFromFile("content/shaders/basic.fs", GL_FRAGMENT_SHADER);
+	//program.Link();
+	//program.Use();
 
-	const char* vertex_source = "#version 430 \n \
-	in vec3 vposition; \n \
-	in vec3 vcolor; \n \
-	uniform mat4 mx; \
-	out vec3 fcolor; \n \
-	void main() \n \
-	{ \n \
-		fcolor = vcolor; \n \
-		gl_Position = mx * vec4(vposition, 1.0); \n \
-	}";
-
+	std::string vertex_source;
+	filesystem::read_file("shaders/basic.vs", vertex_source);
 	GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertex_shader, 1, &vertex_source, 0);
+	const char* c_str = vertex_source.c_str();
+	glShaderSource(vertex_shader, 1, &c_str, 0);
 	glCompileShader(vertex_shader);
-	GLint status = 0;
-	glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &status);
-	if (status == GL_FALSE)
-	{
-		exit(-1);
-	}
 
-	const char* fragment_source = "#version 430 \n \
-	in vec3 fcolor; \n \
-	out vec4 color; \n \
-	void main() \n \
-	{ \n \
-		color = vec4(fcolor, 1.0); \n \
-	}";
-
+	std::string fragment_source;
+	filesystem::read_file("shaders/basic.fs", fragment_source);
 	GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragment_shader, 1, &fragment_source, 0);
+	c_str = fragment_source.c_str();
+	glShaderSource(fragment_shader, 1, &c_str, 0);
 	glCompileShader(fragment_shader);
-	status = 0;
-	glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &status);
-	if (status == GL_FALSE)
-	{
-		exit(-1);
-	}
 
 	GLuint shader_program = glCreateProgram();
 	glAttachShader(shader_program, vertex_shader);
@@ -138,8 +122,8 @@ int main(int argc, char** argv)
 	glUseProgram(shader_program);
 
 	glm::mat4 mx = glm::mat4(1.0f);
-	mx = glm::rotate(mx, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
+	//program.SetUniform("mx", mx);
+	
 	GLint uniform = glGetUniformLocation(shader_program, "mx");
 	glUniformMatrix4fv(uniform, 1, GL_FALSE, &mx[0][0]);
 
@@ -163,7 +147,8 @@ int main(int argc, char** argv)
 
 		SDL_PumpEvents();
 
-		mx = glm::rotate(mx, glm::radians(2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		mx = glm::rotate(mx, glm::radians(1.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		//program.SetUniform("mx", mx);
 		GLint uniform = glGetUniformLocation(shader_program, "mx");
 		glUniformMatrix4fv(uniform, 1, GL_FALSE, &mx[0][0]);
 
@@ -172,13 +157,12 @@ int main(int argc, char** argv)
 
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		glEnd();
-
 		SDL_GL_SwapWindow(window);
 	}
 
 	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);
+	SDL_Quit();
 
 	return 0;
 }

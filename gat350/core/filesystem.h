@@ -1,11 +1,14 @@
 #pragma once
 
+#include <string>
+
 namespace filesystem
 {
 	bool file_exists(const char* filename);
 	bool file_size(const char* filename, size_t& size);
 
 	bool read_file(const char* filename, void** buffer, size_t& size);
+	bool read_file(const char* filename, std::string& string);
 	bool write_file(const char* filename, void* buffer, size_t size);
 	void free_file(void* buffer);
 

@@ -8,6 +8,12 @@
     <Filter Include="source\core">
       <UniqueIdentifier>{e49cc0c8-cf9d-430b-ab49-f897a1f5e210}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\engine">
+      <UniqueIdentifier>{ced633e3-5678-484b-99fd-f50e5b4392f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\engine\renderer">
+      <UniqueIdentifier>{bab720d4-e319-4012-9278-bbe710626dce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -42,6 +48,9 @@
     </ClCompile>
     <ClCompile Include="core\timer.cpp">
       <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\renderer\program.cpp">
+      <Filter>source\engine\renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="core\types.h">
       <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\renderer\program.h">
+      <Filter>source\engine\renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

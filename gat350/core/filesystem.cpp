@@ -46,6 +46,30 @@ bool filesystem::read_file(const char* filename, void** buffer, size_t& size)
 	return success;
 }
 
+bool filesystem::read_file(const char* filename, std::string& string)
+{
+	bool success = false;
+	if (file_exists(filename))
+	{
+		std::ifstream stream(filename, std::ios::binary);
+		if (stream.is_open())
+		{
+			size_t size;
+			if (file_size(filename, size))
+			{
+				success = true;
+				string.resize(size + 1, '\0');
+
+				stream.read(&string[0], size);
+				stream.close();
+			}
+		}
+	}
+
+	return success;
+
+}
+
 bool filesystem::write_file(const char* filename, void* buffer, size_t size)
 {
 	bool success = false;
