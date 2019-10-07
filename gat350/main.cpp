@@ -1,10 +1,11 @@
-#include "engine/renderer/program.h"
+#include "engine/engine.h"
 #include "core/core.h"
 
 #include <sdl.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 const GLfloat positions[] =
 {
@@ -27,6 +28,13 @@ const GLfloat vertices[] =
 	 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
 };
 
+const GLfloat ivertices[] = {
+	-1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f, // top-left
+	 1.0f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // top-right
+	 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom-right
+	-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f  // bottom-left
+};
+
 const GLuint indices[] = {
 	0, 1, 2,
 	2, 3, 0
@@ -35,6 +43,8 @@ const GLuint indices[] = {
 int main(int argc, char** argv)
 {
 	filesystem::set_current_path("content");
+	std::shared_ptr<InputSystem> input = std::make_shared<InputSystem>();
+	input->Initialize();
 
 	int result = SDL_Init(SDL_INIT_VIDEO);
 	if (result != 0)
@@ -62,24 +72,31 @@ int main(int argc, char** argv)
 	}
 
 	//
-	GLuint position_vbo;
-	glGenBuffers(1, &position_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, position_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
-	
-	GLuint color_vbo;
-	glGenBuffers(1, &color_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+	//GLuint position_vbo;
+	//glGenBuffers(1, &position_vbo);
+	//glBindBuffer(GL_ARRAY_BUFFER, position_vbo);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+	//
+	//GLuint color_vbo;
+	//glGenBuffers(1, &color_vbo);
+	//glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 
 	GLuint vertex_vbo;
 	glGenBuffers(1, &vertex_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(ivertices), ivertices, GL_STATIC_DRAW);
+
+	GLuint ebo;
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	GLuint vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 
 	//glEnableVertexAttribArray(0);
 	//glBindBuffer(GL_ARRAY_BUFFER, position_vbo);
@@ -120,12 +137,19 @@ int main(int argc, char** argv)
 	glAttachShader(shader_program, fragment_shader);
 	glLinkProgram(shader_program);
 	glUseProgram(shader_program);
+		
+	//glm::mat4 mxRotate = glm::mat4(1.0f);
+	//mxRotate = glm::rotate(mxRotate, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//glm::mat4 mxTranslate = glm::mat4(1.0f);
+	//mxTranslate = glm::translate(mxTranslate, glm::vec3(0.0f, 0.5f, -10.0f));
+	//glm::mat4 mxModel = mxTranslate;
+	//glm::mat4 mxProjection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.01f, 1000.0f);
+	//glm::mat4 mxProjection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.0f, 100.0f);
 
-	glm::mat4 mx = glm::mat4(1.0f);
 	//program.SetUniform("mx", mx);
-	
+	glm::mat4 mx = glm::mat4(1.0f);
 	GLint uniform = glGetUniformLocation(shader_program, "mx");
-	glUniformMatrix4fv(uniform, 1, GL_FALSE, &mx[0][0]);
+	glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(mx));
 
 	bool quit = false;
 	while (!quit)
@@ -147,15 +171,22 @@ int main(int argc, char** argv)
 
 		SDL_PumpEvents();
 
-		mx = glm::rotate(mx, glm::radians(1.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		g_timer.tick();
+
 		//program.SetUniform("mx", mx);
+
+		float rotate = input->GetKey(SDL_SCANCODE_SPACE) ? 90.0f : 0.0f;
+		mx = glm::rotate(mx, glm::radians(rotate) * g_timer.dt(), glm::vec3(0.0f, 0.0f, 1.0f));
 		GLint uniform = glGetUniformLocation(shader_program, "mx");
-		glUniformMatrix4fv(uniform, 1, GL_FALSE, &mx[0][0]);
+		glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(mx));
 
 		glClearColor(0.85f, 0.85f, 0.85f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindVertexArray(vao);
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 
 		SDL_GL_SwapWindow(window);
 	}

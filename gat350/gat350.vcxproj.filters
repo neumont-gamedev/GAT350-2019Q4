@@ -14,6 +14,12 @@
     <Filter Include="source\engine\renderer">
       <UniqueIdentifier>{bab720d4-e319-4012-9278-bbe710626dce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{0eda7a43-4f02-449b-ac10-94a0500c7556}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\engine\input">
+      <UniqueIdentifier>{244ff7f9-8260-46fc-be14-0b2fdd2c0288}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -50,6 +56,12 @@
       <Filter>source\core</Filter>
     </ClCompile>
     <ClCompile Include="engine\renderer\program.cpp">
+      <Filter>source\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\input\input_system.cpp">
+      <Filter>source\engine\input</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\renderer\renderer.cpp">
       <Filter>source\engine\renderer</Filter>
     </ClCompile>
   </ItemGroup>
@@ -108,5 +120,22 @@
     <ClInclude Include="engine\renderer\program.h">
       <Filter>source\engine\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="engine\input\input_system.h">
+      <Filter>source\engine\input</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\engine.h">
+      <Filter>source\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\renderer\renderer.h">
+      <Filter>source\engine\renderer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="builds\content\shaders\basic.fs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\basic.vs">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

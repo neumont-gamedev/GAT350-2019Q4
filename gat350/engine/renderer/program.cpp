@@ -70,7 +70,7 @@ void Program::CreateShaderFromSource(const std::string& source, GLenum shader_ty
 			std::string infoLog(length, ' ');
 			glGetShaderInfoLog(shader, length, &length, &infoLog[0]);
 			SDL_Log("Error: Failed to compile shader.");
-			SDL_Log("Shader Info: %s", &infoLog[0]);
+			SDL_Log("Shader Info: %s", infoLog.c_str());
 		}
 
 		// delete shader
@@ -106,7 +106,7 @@ void Program::Link()
 			glGetProgramInfoLog(m_program, length, &length, &infoLog[0]);
 
 			SDL_Log("Error: Failed to link program.");
-			SDL_Log("Program Info: %s", &infoLog[0]);
+			SDL_Log("Program Info: %s", infoLog.c_str());
 		}
 
 		glDeleteProgram(m_program);
@@ -120,7 +120,7 @@ void Program::Link()
 
 void Program::Use()
 {
-	assert(m_program && m_linked);
+	ASSERT(m_program && m_linked);
 
 	glUseProgram(m_program);
 }
@@ -152,13 +152,13 @@ void Program::SetUniform(const std::string& name, const glm::vec4& v4)
 void Program::SetUniform(const std::string& name, const glm::mat4& mx4)
 {
 	GLint uniform = GetUniform(name);
-	glUniformMatrix4fv(uniform, 1, GL_FALSE, &mx4[0][0]);
+	glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(mx4));
 }
 
 void Program::SetUniform(const std::string& name, const glm::mat3& mx3)
 {
 	GLint uniform = GetUniform(name);
-	glUniformMatrix3fv(uniform, 1, GL_FALSE, &mx3[0][0]);
+	glUniformMatrix3fv(uniform, 1, GL_FALSE, glm::value_ptr(mx3));
 }
 
 void Program::SetUniform(const std::string& name, float value)
