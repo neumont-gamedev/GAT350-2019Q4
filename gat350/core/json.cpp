@@ -41,6 +41,37 @@ bool json::get_int(const rapidjson::Value& value, const char* property_name, int
 	return true;
 }
 
+bool json::set_int(rapidjson::Value& value, const char* property_name, int& _int)
+{
+	//value.AddMember(property_name, _int, value)
+
+	auto iter = value.FindMember(property_name);
+	if (iter == value.MemberEnd())
+	{
+		return false;
+	}
+
+	auto& property = iter->value;
+	if (property.IsInt() == false)
+	{
+		return false;
+	}
+
+	property.SetInt(_int);
+
+	// add member
+	//rapidjson::Document document;
+	//rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+
+	//std::string str(property_name);
+
+	//value.SetString(property_name, allocator);
+	//document.AddMember((char*)str.c_str(), "test", allocator);
+	//_int = property.GetInt();
+
+	return true;
+}
+
 bool json::get_float(const rapidjson::Value& value, const char* property_name, float& _float)
 {
 	auto iter = value.FindMember(property_name);

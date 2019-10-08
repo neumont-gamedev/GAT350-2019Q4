@@ -1,12 +1,5 @@
 #pragma once
-#include <sdl.h>
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include <string>
-#include <map>
-#include <vector>
+#include "../engine.h"
 
 class Program
 {
@@ -15,7 +8,7 @@ public:
 	~Program();
 
 public:
-	void CompileShaderFromFile(const std::string& filename, GLenum shader_type);
+	void CreateShaderFromFile(const std::string& filename, GLenum shader_type);
 	void CreateShaderFromSource(const std::string& source, GLenum shader_type);
 
 	void Link();

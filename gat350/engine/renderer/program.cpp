@@ -26,7 +26,7 @@ Program::~Program()
 	glDeleteProgram(m_program);
 }
 
-void Program::CompileShaderFromFile(const std::string& filename, GLenum shader_type)
+void Program::CreateShaderFromFile(const std::string& filename, GLenum shader_type)
 {
 	// create program if not already created
 	if (m_program == 0)

@@ -1,12 +1,12 @@
 #pragma once
 
-#include <SDL.h>
+#include "../engine.h"
 
-class InputSystem
+class Input
 {
 public:
-	InputSystem() {}
-	~InputSystem() {}
+	Input() {}
+	~Input() {}
 
 	bool Initialize();
 	void Shutdown();

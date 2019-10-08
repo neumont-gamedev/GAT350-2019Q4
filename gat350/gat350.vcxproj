@@ -145,7 +145,7 @@
     <ClCompile Include="core\random.cpp" />
     <ClCompile Include="core\string.cpp" />
     <ClCompile Include="core\timer.cpp" />
-    <ClCompile Include="engine\input\input_system.cpp" />
+    <ClCompile Include="engine\input\input.cpp" />
     <ClCompile Include="engine\renderer\program.cpp" />
     <ClCompile Include="engine\renderer\renderer.cpp" />
     <ClCompile Include="main.cpp" />
@@ -169,7 +169,7 @@
     <ClInclude Include="core\timer.h" />
     <ClInclude Include="core\types.h" />
     <ClInclude Include="engine\engine.h" />
-    <ClInclude Include="engine\input\input_system.h" />
+    <ClInclude Include="engine\input\input.h" />
     <ClInclude Include="engine\renderer\program.h" />
     <ClInclude Include="engine\renderer\renderer.h" />
   </ItemGroup>

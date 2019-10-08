@@ -58,11 +58,11 @@
     <ClCompile Include="engine\renderer\program.cpp">
       <Filter>source\engine\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="engine\input\input_system.cpp">
-      <Filter>source\engine\input</Filter>
-    </ClCompile>
     <ClCompile Include="engine\renderer\renderer.cpp">
       <Filter>source\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\input\input.cpp">
+      <Filter>source\engine\input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -120,14 +120,14 @@
     <ClInclude Include="engine\renderer\program.h">
       <Filter>source\engine\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="engine\input\input_system.h">
-      <Filter>source\engine\input</Filter>
-    </ClInclude>
     <ClInclude Include="engine\engine.h">
       <Filter>source\engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\renderer\renderer.h">
       <Filter>source\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\input\input.h">
+      <Filter>source\engine\input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
