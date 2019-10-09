@@ -18,12 +18,20 @@ bool Renderer::Initialize(u32 width, u32 height, bool fullscreen)
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+	
 	SDL_GL_SetSwapInterval(1);
 
 	m_context = SDL_GL_CreateContext(m_window);
 	if (!gladLoadGL()) {
 		return false;
 	}
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CCW);
+	glCullFace(GL_BACK);
 
 	return true;
 }
@@ -37,7 +45,7 @@ void Renderer::Shutdown()
 void Renderer::ClearBuffer()
 {
 	glClearColor(0.85f, 0.85f, 0.85f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Renderer::SwapBuffer()
