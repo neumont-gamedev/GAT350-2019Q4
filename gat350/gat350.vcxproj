@@ -148,6 +148,8 @@
     <ClCompile Include="engine\input\input.cpp" />
     <ClCompile Include="engine\renderer\program.cpp" />
     <ClCompile Include="engine\renderer\renderer.cpp" />
+    <ClCompile Include="engine\renderer\vertex_array.cpp" />
+    <ClCompile Include="engine\renderer\vertex_index_array.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +174,8 @@
     <ClInclude Include="engine\input\input.h" />
     <ClInclude Include="engine\renderer\program.h" />
     <ClInclude Include="engine\renderer\renderer.h" />
+    <ClInclude Include="engine\renderer\vertex_array.h" />
+    <ClInclude Include="engine\renderer\vertex_index_array.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="builds\content\shaders\basic.fs" />

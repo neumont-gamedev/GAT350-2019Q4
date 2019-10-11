@@ -18,7 +18,6 @@ bool Renderer::Initialize(u32 width, u32 height, bool fullscreen)
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-	
 	SDL_GL_SetSwapInterval(1);
 
 	m_context = SDL_GL_CreateContext(m_window);

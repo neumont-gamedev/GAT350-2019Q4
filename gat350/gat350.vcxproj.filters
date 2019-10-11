@@ -64,6 +64,12 @@
     <ClCompile Include="engine\input\input.cpp">
       <Filter>source\engine\input</Filter>
     </ClCompile>
+    <ClCompile Include="engine\renderer\vertex_array.cpp">
+      <Filter>source\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\renderer\vertex_index_array.cpp">
+      <Filter>source\engine\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\assert.h">
@@ -128,6 +134,12 @@
     </ClInclude>
     <ClInclude Include="engine\input\input.h">
       <Filter>source\engine\input</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\renderer\vertex_array.h">
+      <Filter>source\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\renderer\vertex_index_array.h">
+      <Filter>source\engine\renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
