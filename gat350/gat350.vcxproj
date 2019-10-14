@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\glad\include;$(SolutionDir)external\SDL2-2.0.10\include;$(SolutionDir)external\glm;$(SolutionDir)external\rapidjson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\glad\include;$(SolutionDir)external\SDL2-2.0.10\include;$(SolutionDir)external\glm;$(SolutionDir)external\rapidjson;$(SolutionDir)external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -90,7 +90,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\glad\include;$(SolutionDir)external\SDL2-2.0.10\include;$(SolutionDir)external\glm;$(SolutionDir)external\rapidjson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\glad\include;$(SolutionDir)external\SDL2-2.0.10\include;$(SolutionDir)external\glm;$(SolutionDir)external\rapidjson;$(SolutionDir)external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -106,7 +106,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\glad\include;$(SolutionDir)external\SDL2-2.0.10\include;$(SolutionDir)external\glm;$(SolutionDir)external\rapidjson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\glad\include;$(SolutionDir)external\SDL2-2.0.10\include;$(SolutionDir)external\glm;$(SolutionDir)external\rapidjson;$(SolutionDir)external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,7 +124,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\glad\include;$(SolutionDir)external\SDL2-2.0.10\include;$(SolutionDir)external\glm;$(SolutionDir)external\rapidjson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\glad\include;$(SolutionDir)external\SDL2-2.0.10\include;$(SolutionDir)external\glm;$(SolutionDir)external\rapidjson;$(SolutionDir)external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,6 +148,7 @@
     <ClCompile Include="engine\input\input.cpp" />
     <ClCompile Include="engine\renderer\program.cpp" />
     <ClCompile Include="engine\renderer\renderer.cpp" />
+    <ClCompile Include="engine\renderer\texture.cpp" />
     <ClCompile Include="engine\renderer\vertex_array.cpp" />
     <ClCompile Include="engine\renderer\vertex_index_array.cpp" />
     <ClCompile Include="main.cpp" />
@@ -174,12 +175,17 @@
     <ClInclude Include="engine\input\input.h" />
     <ClInclude Include="engine\renderer\program.h" />
     <ClInclude Include="engine\renderer\renderer.h" />
+    <ClInclude Include="engine\renderer\texture.h" />
     <ClInclude Include="engine\renderer\vertex_array.h" />
     <ClInclude Include="engine\renderer\vertex_index_array.h" />
+    <ClInclude Include="engine\scene.h" />
+    <ClInclude Include="engine\system.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="builds\content\shaders\basic.fs" />
     <None Include="builds\content\shaders\basic.vs" />
+    <None Include="builds\content\shaders\texture_unlit.fs" />
+    <None Include="builds\content\shaders\texture_unlit.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

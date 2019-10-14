@@ -8,6 +8,7 @@ public:
 	{
 		POSITION = 0,
 		COLOR,
+		TEXCOORD,
 		MULTI
 	};
 

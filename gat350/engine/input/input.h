@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../engine.h"
+#include "../system.h"
 
-class Input
+class Input : public System
 {
 public:
 	Input() {}
@@ -10,7 +10,6 @@ public:
 
 	bool Initialize();
 	void Shutdown();
-
 	void Update();
 
 	bool GetKey(SDL_Scancode scancode);

@@ -70,6 +70,9 @@
     <ClCompile Include="engine\renderer\vertex_index_array.cpp">
       <Filter>source\engine\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="engine\renderer\texture.cpp">
+      <Filter>source\engine\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\assert.h">
@@ -141,12 +144,27 @@
     <ClInclude Include="engine\renderer\vertex_index_array.h">
       <Filter>source\engine\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="engine\renderer\texture.h">
+      <Filter>source\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene.h">
+      <Filter>source\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\system.h">
+      <Filter>source\engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="builds\content\shaders\basic.fs">
       <Filter>shaders</Filter>
     </None>
     <None Include="builds\content\shaders\basic.vs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\texture_unlit.fs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\texture_unlit.vs">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>
