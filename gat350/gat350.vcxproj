@@ -182,10 +182,10 @@
     <ClInclude Include="engine\system.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="builds\content\shaders\basic.fs" />
-    <None Include="builds\content\shaders\basic.vs" />
-    <None Include="builds\content\shaders\texture_unlit.fs" />
-    <None Include="builds\content\shaders\texture_unlit.vs" />
+    <None Include="builds\content\shaders\basic.frag" />
+    <None Include="builds\content\shaders\basic.vert" />
+    <None Include="builds\content\shaders\texture_unlit.frag" />
+    <None Include="builds\content\shaders\texture_unlit.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

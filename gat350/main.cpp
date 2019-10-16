@@ -119,8 +119,8 @@ int main(int argc, char** argv)
 	vertex_array.SetAttribute(VertexArray::TEXCOORD, 2, 8 * sizeof(GLfloat), 6 * sizeof(GLfloat));
 	
 	Program program;
-	program.CreateShaderFromFile("shaders/texture_unlit.vs", GL_VERTEX_SHADER);
-	program.CreateShaderFromFile("shaders/texture_unlit.fs", GL_FRAGMENT_SHADER);
+	program.CreateShaderFromFile("shaders/texture_unlit.vert", GL_VERTEX_SHADER);
+	program.CreateShaderFromFile("shaders/texture_unlit.frag", GL_FRAGMENT_SHADER);
 	program.Link();
 	program.Use();
 
@@ -128,14 +128,15 @@ int main(int argc, char** argv)
 	//texture.CreateTexture("textures/nc.bmp");
 	//texture.Bind();
 
-	int width, height, bpp;
-	u8* data = Texture::LoadImage("textures/nc.bmp", width, height, bpp);
 
-	GLuint texture;
-	glGenTextures(1, &texture);
+	GLuint texture[2];
+	glGenTextures(2, &texture[0]);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+
+	int width, height, bpp;
+	u8* data = Texture::LoadImage("textures/nc.bmp", width, height, bpp);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
 
@@ -146,7 +147,23 @@ int main(int argc, char** argv)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	delete data;
-	
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture[1]);
+
+	data = Texture::LoadImage("textures/crate.bmp", width, height, bpp);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	delete data;
+
+
 	glm::mat4 mxTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
 	glm::mat4 mxRotate = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 mxProjection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.01f, 1000.0f);
@@ -181,8 +198,7 @@ int main(int argc, char** argv)
 		if (input->GetKey(SDL_SCANCODE_DOWN))	translate.y = -speed;
 		if (input->GetKey(SDL_SCANCODE_W))		translate.z = speed;
 		if (input->GetKey(SDL_SCANCODE_S))		translate.z = -speed;
-
-
+		
 		mxTranslate = glm::translate(mxTranslate, translate * g_timer.dt());
 		mxRotate = glm::rotate(mxRotate, glm::radians(45.0f) * g_timer.dt(), glm::vec3(0.0f, 1.0f, 0.0f));
 		glm::mat4 mxModel = mxTranslate * mxRotate;
