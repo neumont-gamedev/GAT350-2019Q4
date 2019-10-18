@@ -12,13 +12,13 @@ uniform mat4 mvp_matrix;
 
 void main()
 {
-	vec3 normal = normalize(mat3(model_view_matrix) * vnormal);
+	vec3 normal_view = normalize(mat3(model_view_matrix) * vnormal);
 	vec4 position_view = model_view_matrix * vec4(vposition, 1.0);
 	vec3 position_to_light = normalize(vec3(light_position - position_view));
 
-	//fcolor = ambient;
-	float intensity = max(dot(position_to_light, normal), 0.0);
+	float intensity = max(dot(position_to_light, normal_view), 0.0);
 	fcolor = ambient + vec3(intensity);
 
 	gl_Position = mvp_matrix * vec4(vposition, 1.0);
 }
+//fcolor = ambient;
