@@ -8,7 +8,7 @@ out vec3 fcolor;
 out vec2 ftexcoord;
 	
 uniform mat4 mx;
-	
+
 void main()
 {
 	fcolor = vcolor;

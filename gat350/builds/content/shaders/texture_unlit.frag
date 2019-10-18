@@ -13,5 +13,5 @@ void main()
 	vec4 color1 = texture(texture_sample1, ftexcoord);
 	vec4 color2 = texture(texture_sample2, ftexcoord);
 
-	color = color1; 
+	color = mix(color1, color2, 0.5); 
 }

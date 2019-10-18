@@ -167,5 +167,11 @@
     <None Include="builds\content\shaders\basic.frag">
       <Filter>shaders</Filter>
     </None>
+    <None Include="builds\content\shaders\basic_lit.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\basic_lit.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
