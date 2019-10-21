@@ -21,4 +21,3 @@ void main()
 
 	gl_Position = mvp_matrix * vec4(vposition, 1.0);
 }
-//fcolor = ambient;

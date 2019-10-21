@@ -11,6 +11,8 @@ void Material::Destroy()
 
 void Material::Update()
 {
+	program->Use();
+
 	program->SetUniform("material.ambient", ambient);
 	program->SetUniform("material.diffuse", diffuse);
 	program->SetUniform("material.specular", specular);

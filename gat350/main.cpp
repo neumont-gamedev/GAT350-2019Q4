@@ -4,6 +4,8 @@
 #include "engine/renderer/program.h"
 #include "engine/renderer/vertex_index_array.h"
 #include "engine/renderer/texture.h"
+#include "engine/renderer/material.h"
+#include "engine/renderer/light.h"
 
 static float cube_vertices[] = {
 	// Front
@@ -70,13 +72,26 @@ int main(int argc, char** argv)
 	vertex_array.SetAttribute(VertexArray::POSITION, 3, 6 * sizeof(GLfloat), 0);
 	vertex_array.SetAttribute(VertexArray::NORMAL, 3, 6 * sizeof(GLfloat), 3 * sizeof(GLfloat));
 	
-	Program program;
-	program.CreateShaderFromFile("shaders/basic_lit.vert", GL_VERTEX_SHADER);
-	program.CreateShaderFromFile("shaders/basic_lit.frag", GL_FRAGMENT_SHADER);
-	program.Link();
-	program.Use();
+	Material material;
+	material.program = new Program();
+	material.program->CreateShaderFromFile("shaders/gouraud.vert", GL_VERTEX_SHADER);
+	material.program->CreateShaderFromFile("shaders/gouraud.frag", GL_FRAGMENT_SHADER);
+	material.program->Link();
+	material.program->Use();
 
-	glm::vec3 light_position = glm::vec3(5.0f, 10.0f, 5.0f);
+	material.ambient = glm::vec3(1.0f);
+	material.diffuse = glm::vec3(0.2f, 0.2f, 1.0f);
+	material.specular = glm::vec3(1.0f);
+	material.shininess = 32.0f;
+
+	material.Update();
+	material.Use();
+
+	Light light;
+	light.position = glm::vec4(5.0f, 2.0f, 5.0f, 1.0f);
+	light.ambient = glm::vec3(0.1f);
+	light.diffuse = glm::vec3(1.0f);
+	light.specular = glm::vec3(1.0f);
 
 	glm::mat4 mxTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
 	glm::mat4 mxRotate = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -120,20 +135,18 @@ int main(int argc, char** argv)
 		glm::mat4 mxModel = mxTranslate * mxRotate;
 
 		glm::mat4 model_view_matrix = mxView * mxModel;
-		program.SetUniform("model_view_matrix", model_view_matrix);
+		material.program->SetUniform("model_view_matrix", model_view_matrix);
 		glm::mat4 mvp_matrix = mxProjection * model_view_matrix;
-		program.SetUniform("mvp_matrix", mvp_matrix);
-
-		program.SetUniform("ambient", glm::vec3(0.0f, 0.0f, 0.3f));
+		material.program->SetUniform("mvp_matrix", mvp_matrix);
 
 		// tranform light position
-		glm::vec4 position = mxView * glm::vec4(light_position, 1.0f);
-		program.SetUniform("light_position", position);
+		light.SetShader(material.program, mxView);
 
 		renderer->ClearBuffer();
 		vertex_array.Draw();
 		renderer->SwapBuffer();
 	}
+	material.Destroy();
 	input->Shutdown();
 	renderer->Shutdown();
 

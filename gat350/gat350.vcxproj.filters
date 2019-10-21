@@ -73,6 +73,12 @@
     <ClCompile Include="engine\renderer\texture.cpp">
       <Filter>source\engine\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="engine\renderer\light.cpp">
+      <Filter>source\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\renderer\material.cpp">
+      <Filter>source\engine\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\assert.h">
@@ -153,6 +159,12 @@
     <ClInclude Include="engine\system.h">
       <Filter>source\engine</Filter>
     </ClInclude>
+    <ClInclude Include="engine\renderer\light.h">
+      <Filter>source\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\renderer\material.h">
+      <Filter>source\engine\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="builds\content\shaders\basic.vert">
@@ -171,6 +183,18 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="builds\content\shaders\basic_lit.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\gouraud.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\gouraud.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\phong.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\phong.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>
