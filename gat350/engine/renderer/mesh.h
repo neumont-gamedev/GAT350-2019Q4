@@ -1,22 +1,9 @@
 #pragma once
 #include "../engine.h"
-#include "vertex_index_array.h"
 
 class Mesh
 {
 public:
-	Mesh();
-	~Mesh();
-
-	bool Import(const std::string& filename);
-	void Draw();
-
-	//static bool Load(std::vector<glm::vec3>& positions, std::vector<glm::vec3>& normals, std::vector<glm::vec3>& uvs);
-
-private:
-	//void ProcessNode(aiNode* node, const aiScene* scene, const glm::vec3& translate, const glm::vec3& scale);
-	//void ProcessMesh(aiMesh* mesh, const aiScene* scene, const glm::vec3& translate, const glm::vec3& scale);
-
-protected:
-	//VertexIndexArray m_vertex_array;
+	static bool Load(const std::string& filename, std::vector<glm::vec3>& positions, std::vector<glm::vec3>& normals, std::vector<glm::vec2>& texcoords);
+	static void CalculateNormal(const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2, glm::vec3& normal);
 };

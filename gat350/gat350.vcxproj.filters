@@ -79,6 +79,9 @@
     <ClCompile Include="engine\renderer\material.cpp">
       <Filter>source\engine\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="engine\renderer\mesh.cpp">
+      <Filter>source\engine\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\assert.h">
@@ -163,6 +166,9 @@
       <Filter>source\engine\renderer</Filter>
     </ClInclude>
     <ClInclude Include="engine\renderer\material.h">
+      <Filter>source\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\renderer\mesh.h">
       <Filter>source\engine\renderer</Filter>
     </ClInclude>
   </ItemGroup>

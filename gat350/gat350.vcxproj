@@ -148,6 +148,7 @@
     <ClCompile Include="engine\input\input.cpp" />
     <ClCompile Include="engine\renderer\light.cpp" />
     <ClCompile Include="engine\renderer\material.cpp" />
+    <ClCompile Include="engine\renderer\mesh.cpp" />
     <ClCompile Include="engine\renderer\program.cpp" />
     <ClCompile Include="engine\renderer\renderer.cpp" />
     <ClCompile Include="engine\renderer\texture.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="engine\input\input.h" />
     <ClInclude Include="engine\renderer\light.h" />
     <ClInclude Include="engine\renderer\material.h" />
+    <ClInclude Include="engine\renderer\mesh.h" />
     <ClInclude Include="engine\renderer\program.h" />
     <ClInclude Include="engine\renderer\renderer.h" />
     <ClInclude Include="engine\renderer\texture.h" />

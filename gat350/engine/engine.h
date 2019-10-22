@@ -12,6 +12,8 @@
 #include <map>
 #include <vector>
 #include <fstream>
+#include <sstream>
+#include <iostream>
 
 class Engine
 {
