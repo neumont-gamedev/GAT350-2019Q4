@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> texcoords;
-	Mesh::Load("meshes/sphere.obj", positions, normals, texcoords);
+	Mesh::Load("meshes/ogre.obj", positions, normals, texcoords);
 
 	VertexArray vertex_array;
 	if (!positions.empty())
@@ -91,8 +91,8 @@ int main(int argc, char** argv)
 	
 	Material material;
 	material.program = new Program();
-	material.program->CreateShaderFromFile("shaders/gouraud.vert", GL_VERTEX_SHADER);
-	material.program->CreateShaderFromFile("shaders/gouraud.frag", GL_FRAGMENT_SHADER);
+	material.program->CreateShaderFromFile("shaders/phong.vert", GL_VERTEX_SHADER);
+	material.program->CreateShaderFromFile("shaders/phong.frag", GL_FRAGMENT_SHADER);
 	material.program->Link();
 	material.program->Use();
 

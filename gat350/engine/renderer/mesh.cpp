@@ -99,11 +99,3 @@ bool Mesh::Load(const std::string& filename, std::vector<glm::vec3>& positions, 
 	return true;
 }
 
-void Mesh::CalculateNormal(const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2, glm::vec3& normal)
-{
-	glm::vec3 v1_0 = v1 - v0;
-	glm::vec3 v2_0 = v2 - v0;
-
-	normal = glm::cross(v1 - v0, v2 - v0);
-	normal = glm::normalize(normal);
-}

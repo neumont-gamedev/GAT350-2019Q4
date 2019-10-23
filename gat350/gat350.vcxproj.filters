@@ -20,6 +20,9 @@
     <Filter Include="source\engine\input">
       <UniqueIdentifier>{244ff7f9-8260-46fc-be14-0b2fdd2c0288}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\engine\math">
+      <UniqueIdentifier>{568f77c9-ef3b-47fd-bb52-fb9dfad8f275}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -81,6 +84,9 @@
     </ClCompile>
     <ClCompile Include="engine\renderer\mesh.cpp">
       <Filter>source\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\math\math.cpp">
+      <Filter>source\engine\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="engine\renderer\mesh.h">
       <Filter>source\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\math\math.h">
+      <Filter>source\engine\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
