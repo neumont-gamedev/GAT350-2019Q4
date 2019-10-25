@@ -1,12 +1,118 @@
 #include "mesh.h"
 
+void Mesh::Load(const std::string& filename)
+{
+	//Assimp::Importer importer;
+	//const aiScene* scene = importer.ReadFile(filename, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	//// check for errors
+	//if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+	//{
+	//	return;
+	//}
+	//// retrieve the directory path of the filepath
+	//m_directory = filename.substr(0, filename.find_last_of('/'));
+
+	//// process ASSIMP's root node recursively
+	//ProcessNode(scene->mRootNode, scene);
+
+}
+
+void Mesh::ProcessNode(aiNode* node, const aiScene* scene)
+{
+	for (size_t i = 0; i < node->mNumMeshes; i++)
+	{
+		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		ProcessMesh(mesh, scene);
+	}
+
+	for (size_t i = 0; i < node->mNumChildren; i++)
+	{
+		ProcessNode(node->mChildren[i], scene);
+	}
+}
+
+void Mesh::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+{
+	std::vector<glm::vec3> positions;
+	std::vector<glm::vec3> tangents;
+
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> texcoords;
+
+	for (size_t i = 0; i < mesh->mNumVertices; i++)
+	{
+		glm::vec3 position;
+		position.x = mesh->mVertices[i].x;
+		position.y = mesh->mVertices[i].y;
+		position.z = mesh->mVertices[i].z;
+		positions.push_back(position);
+
+		glm::vec3 normal;
+		normal.x = mesh->mNormals[i].x;
+		normal.y = mesh->mNormals[i].y;
+		normal.z = mesh->mNormals[i].z;
+		normals.push_back(normal);
+
+		glm::vec3 tangent;
+		tangent.x = mesh->mTangents[i].x;
+		tangent.y = mesh->mTangents[i].y;
+		tangent.z = mesh->mTangents[i].z;
+		tangents.push_back(tangent);
+
+		if (mesh->mTextureCoords[0])
+		{
+			glm::vec2 texcoord;
+			texcoord.x = mesh->mTextureCoords[0][i].x;
+			texcoord.y = mesh->mTextureCoords[0][i].y;
+			texcoords.push_back(texcoord);
+		}
+
+		if (mesh->mTextureCoords[0])
+		{
+			glm::vec3 tangent;
+			tangent.x = mesh->mTangents[i].x;
+			tangent.y = mesh->mTangents[i].y;
+			tangent.z = mesh->mTangents[i].z;
+			tangents.push_back(tangent);
+		}
+	}
+
+	//m_vertexArrays.CreateBuffer(VertexArrays::eVertexType::POSITION, sizeof(glm::vec3), (GLsizei)positions.size(), &positions[0]);
+	//m_vertexArrays.SetAttribute(0, 3, sizeof(glm::vec3), 0);
+	//if (normals.size() > 0)
+	//{
+	//	m_vertexArrays.CreateBuffer(VertexArrays::eVertexType::NORMAL, sizeof(glm::vec3), (GLsizei)normals.size(), &normals[0]);
+	//	m_vertexArrays.SetAttribute(1, 3, sizeof(glm::vec3), 0);
+	//}
+	//if (texcoords.size() > 0)
+	//{
+	//	m_vertexArrays.CreateBuffer(VertexArrays::eVertexType::TEXCOORD, sizeof(glm::vec2), (GLsizei)texcoords.size(), &texcoords[0]);
+	//	m_vertexArrays.SetAttribute(2, 2, sizeof(glm::vec2), 0);
+	//}
+	//if (tangents.size() > 0)
+	//{
+	//	m_vertexArrays.CreateBuffer(VertexArrays::eVertexType::TANGENT, sizeof(glm::vec3), (GLsizei)tangents.size(), &tangents[0]);
+	//	m_vertexArrays.SetAttribute(3, 3, sizeof(glm::vec3), 0);
+	//}
+
+	//std::vector<GLuint> indices;
+	//for (size_t i = 0; i < mesh->mNumFaces; i++)
+	//{
+	//	aiFace face = mesh->mFaces[i];
+	//	for (size_t j = 0; j < face.mNumIndices; j++)
+	//	{
+	//		indices.push_back(face.mIndices[j]);
+	//	}
+	//}
+
+	//m_vertexArrays.CreateIndexBuffer(GL_UNSIGNED_INT, (GLsizei)indices.size(), &indices[0]);
+}
+
 bool Mesh::Load(const std::string& filename, std::vector<glm::vec3>& positions, std::vector<glm::vec3>& normals, std::vector<glm::vec2>& texcoords)
 {
 	std::vector<glm::vec3> mesh_positions;
 	std::vector<glm::vec3> mesh_normals;
 	std::vector<glm::vec2> mesh_texcoords;
-
-	ms_timer stopwatch;
 
 #if 1
 	std::ifstream stream(filename, std::ios::binary);
@@ -91,9 +197,6 @@ bool Mesh::Load(const std::string& filename, std::vector<glm::vec3>& positions, 
 			}
 		}
 	}
-
-	std::cout << "time: " << stopwatch.elapsed_time() << std::endl;
-
 	stream.close();
 
 	return true;

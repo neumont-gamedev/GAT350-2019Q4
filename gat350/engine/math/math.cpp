@@ -1,15 +1,15 @@
 #include "math.h"
 
-namespace Math
+namespace math
 {
-	float length(const glm::vec3& v)
+	float magnitude(const glm::vec3& v)
 	{
 		return sqrt(dot(v, v));
 	}
 
 	float distance(const glm::vec3& v1, const glm::vec3& v2)
 	{
-		return length(v1 - v2);
+		return magnitude(v1 - v2);
 	}
 
 	float dot(const glm::vec3& v0, const glm::vec3& v1)
@@ -26,7 +26,13 @@ namespace Math
 
 	glm::vec3 normalize(const glm::vec3& v)
 	{
-		return v / length(v);
+		float m = magnitude(v);
+		return glm::vec3(v.x / m, v.y / m, v.z /m);
+	}
+
+	glm::vec3 reflect(const glm::vec3& v, const glm::vec3& n)
+	{
+		return v - n * dot(n, v) * 2.0f;
 	}
 
 	glm::vec3 calculate_normal(const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2)
@@ -37,6 +43,7 @@ namespace Math
 		glm::vec3 normal = cross(v1 - v0, v2 - v0);
 		return (normalize(normal));
 	}
+
 	void transform(std::vector<glm::vec3>& vectors, glm::mat4& matrix)
 	{
 		for (glm::vec3& v : vectors)

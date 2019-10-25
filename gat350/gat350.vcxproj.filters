@@ -88,6 +88,9 @@
     <ClCompile Include="engine\math\math.cpp">
       <Filter>source\engine\math</Filter>
     </ClCompile>
+    <ClCompile Include="engine\renderer\model.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\assert.h">
@@ -180,6 +183,9 @@
     <ClInclude Include="engine\math\math.h">
       <Filter>source\engine\math</Filter>
     </ClInclude>
+    <ClInclude Include="engine\renderer\model.h">
+      <Filter>source\engine\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="builds\content\shaders\basic.vert">
@@ -210,6 +216,12 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="builds\content\shaders\phong.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\texture_phong.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\texture_phong.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

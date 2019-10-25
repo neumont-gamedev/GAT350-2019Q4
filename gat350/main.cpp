@@ -7,49 +7,7 @@
 #include "engine/renderer/material.h"
 #include "engine/renderer/light.h"
 #include "engine/renderer/mesh.h"
-
-static float cube_vertices[] = {
-	// Front
-	-1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-	 1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-	 1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-	-1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-	// Right
-	 1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f,
-	 1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,
-	 1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f,
-	 1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f,
-	// Back
-	-1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
-	-1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
-	 1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
-	 1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f,
-	// Left
-	-1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f,
-	-1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f,
-	-1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f,
-	-1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f,
-	// Bottom
-	-1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f,
-	-1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f,
-	 1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f,
-	 1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f,
-	// Top
-	-1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-	 1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-	 1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-	-1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f
-};
-
-static GLushort cube_elements[] =
-{
-	 0,  1,  2,  0,  2,  3,
-	 4,  5,  6,  4,  6,  7,
-	 8,  9, 10,  8, 10, 11,
-	12, 13, 14, 12, 14, 15,
-	16, 17, 18, 16, 18, 19,
-	20, 21, 22, 20, 22, 23
-};
+#include "engine/math/math.h"
 
 int main(int argc, char** argv)
 {
@@ -70,7 +28,22 @@ int main(int argc, char** argv)
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> texcoords;
-	Mesh::Load("meshes/ogre.obj", positions, normals, texcoords);
+	Mesh::Load("meshes/suzanne.obj", positions, normals, texcoords);
+
+	if (normals.empty())
+	{
+		for (size_t i = 0; i < positions.size() - 3; i += 3)
+		{
+			glm::vec3 normal = math::calculate_normal(positions[i + 0], positions[i + 1], positions[i + 2]);
+			normals.push_back(normal);
+			normals.push_back(normal);
+			normals.push_back(normal);
+		}
+	}
+
+	//glm::mat3 rotate = glm::mat3(glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
+	//math::transform(positions, rotate);
+	//math::transform(normals, rotate);
 
 	VertexArray vertex_array;
 	if (!positions.empty())
@@ -91,15 +64,19 @@ int main(int argc, char** argv)
 	
 	Material material;
 	material.program = new Program();
-	material.program->CreateShaderFromFile("shaders/phong.vert", GL_VERTEX_SHADER);
-	material.program->CreateShaderFromFile("shaders/phong.frag", GL_FRAGMENT_SHADER);
+	material.program->CreateShaderFromFile("shaders/texture_phong.vert", GL_VERTEX_SHADER);
+	material.program->CreateShaderFromFile("shaders/texture_phong.frag", GL_FRAGMENT_SHADER);
 	material.program->Link();
 	material.program->Use();
 
 	material.ambient = glm::vec3(1.0f);
-	material.diffuse = glm::vec3(0.2f, 0.2f, 1.0f);
+	material.diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
 	material.specular = glm::vec3(1.0f);
-	material.shininess = 40.0f;
+	material.shininess = 128.0f;
+
+	Texture* texture = new Texture();
+	texture->CreateTexture("textures/uvgrid.jpg");
+	material.textures.push_back(texture);
 
 	material.Update();
 	material.Use();
