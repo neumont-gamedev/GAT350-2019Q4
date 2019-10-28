@@ -23,12 +23,12 @@
     <Filter Include="source\engine\math">
       <UniqueIdentifier>{568f77c9-ef3b-47fd-bb52-fb9dfad8f275}</UniqueIdentifier>
     </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{8bd007e3-f688-4f67-a45d-01b416a05e57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\external\glad\src\glad.c">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="core\assert.cpp">
@@ -88,8 +88,29 @@
     <ClCompile Include="engine\math\math.cpp">
       <Filter>source\engine\math</Filter>
     </ClCompile>
+    <ClCompile Include="engine\renderer\gui.cpp">
+      <Filter>source\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\glad\src\glad.c">
+      <Filter>external</Filter>
+    </ClCompile>
     <ClCompile Include="engine\renderer\model.cpp">
-      <Filter>source</Filter>
+      <Filter>source\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\imgui.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\imgui_draw.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\imgui_widgets.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\examples\imgui_impl_opengl3.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\imgui\examples\imgui_impl_sdl.cpp">
+      <Filter>external</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -186,6 +207,9 @@
     <ClInclude Include="engine\renderer\model.h">
       <Filter>source\engine\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="engine\renderer\gui.h">
+      <Filter>source\engine\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="builds\content\shaders\basic.vert">
@@ -222,6 +246,12 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="builds\content\shaders\texture_phong.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\toon.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\texture_phong_fog.frag">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

@@ -43,10 +43,10 @@ public:
 	
 	void tick()
 	{
-		clock_duration duration = std::chrono::duration_cast<clock_duration>(clock::now() - m_prev_frame_time);
+		clock_duration frame_duration = std::chrono::duration_cast<clock_duration>(clock::now() - m_prev_frame_time);
 		m_prev_frame_time = clock::now();
 
-		m_dt = duration.count() / static_cast<float>(clock_duration::duration::period::den);
+		m_dt = frame_duration.count() / static_cast<float>(clock_duration::duration::period::den);
 
 		m_frame_count++;
 		if (m_frame_count == 100)
@@ -57,6 +57,7 @@ public:
 			float elapsed = duration.count() / static_cast<float>(clock_duration::duration::period::den);
 			
 			m_fps = static_cast<float>(m_frame_count / elapsed);
+			//m_ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 			m_frame_count = 0;
 		}
 	}
@@ -68,7 +69,7 @@ public:
 
 	inline float milliseconds() const
 	{
-		return m_dt * 1000.0f;
+		return m_ms;
 	}
 	
 	inline float fps() const
@@ -79,6 +80,7 @@ public:
 private:
 	float m_dt;
 	float m_fps;
+	float m_ms;
 
 	clock::time_point m_prev_frame_time;
 	clock::time_point m_start_frame_time;

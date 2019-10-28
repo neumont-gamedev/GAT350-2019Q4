@@ -1,10 +1,13 @@
 #pragma once
 #include "../engine.h"
 
-struct Light
+class Light
 {
+public:
 	void SetShader(class Program* program, const glm::mat4& view);
+	void Edit();
 
+public:
 	union
 	{
 		glm::vec4 position = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
