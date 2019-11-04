@@ -26,6 +26,9 @@
     <Filter Include="external">
       <UniqueIdentifier>{8bd007e3-f688-4f67-a45d-01b416a05e57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\engine\framework">
+      <UniqueIdentifier>{e16b2b98-1cd0-4767-8f17-2e79573ccb33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -112,6 +115,9 @@
     <ClCompile Include="..\external\imgui\examples\imgui_impl_sdl.cpp">
       <Filter>external</Filter>
     </ClCompile>
+    <ClCompile Include="engine\math\transform.cpp">
+      <Filter>source\engine\math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\assert.h">
@@ -186,12 +192,6 @@
     <ClInclude Include="engine\renderer\texture.h">
       <Filter>source\engine\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene.h">
-      <Filter>source\engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\system.h">
-      <Filter>source\engine</Filter>
-    </ClInclude>
     <ClInclude Include="engine\renderer\light.h">
       <Filter>source\engine\renderer</Filter>
     </ClInclude>
@@ -209,6 +209,24 @@
     </ClInclude>
     <ClInclude Include="engine\renderer\gui.h">
       <Filter>source\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\math\transform.h">
+      <Filter>source\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\framework\system.h">
+      <Filter>source\engine\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\framework\actor.h">
+      <Filter>source\engine\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\framework\object.h">
+      <Filter>source\engine\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\framework\resource.h">
+      <Filter>source\engine\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\framework\scene.h">
+      <Filter>source\engine\framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

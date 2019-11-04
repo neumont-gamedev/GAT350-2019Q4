@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../system.h"
+#include "../framework/system.h"
 
 class Renderer : public System
 {
