@@ -1,13 +1,17 @@
 #pragma once
-#include "../engine.h"
+#include "../framework/resource.h"
 
-class Texture
+class Texture : public Resource
 {
 public:
-	Texture() {}
-	~Texture();
+	OBJECT_DECLARATION(Texture, Resource)
 
-	void CreateTexture(const std::string& filename, GLenum type = GL_TEXTURE_2D, GLuint unit = GL_TEXTURE0);
+	~Texture() {}
+
+	bool Create(const Name& name);
+	void Destroy();
+
+	bool CreateTexture(const std::string& filename, GLenum type = GL_TEXTURE_2D, GLuint unit = GL_TEXTURE0);
 	void Bind();
 
 	static u8* LoadImage(const std::string& filename, int& width, int& height, int& components);

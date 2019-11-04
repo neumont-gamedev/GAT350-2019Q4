@@ -1,11 +1,13 @@
 #include "material.h"
 
+bool Material::Create(const Name& name)
+{
+	return true;
+}
+
 void Material::Destroy()
 {
-	for (Texture* texture : textures)
-	{
-		delete texture;
-	}
+	//
 }
 
 void Material::SetShader(class Program* shader)
@@ -18,7 +20,7 @@ void Material::SetShader(class Program* shader)
 
 void Material::Use()
 {
-	for (Texture* texture : textures)
+	for (auto texture : textures)
 	{
 		texture->Bind();
 	}
@@ -26,10 +28,11 @@ void Material::Use()
 
 void Material::Edit()
 {
-	ImGui::Begin("Material");
+	ImGui::PushID("Material");
+	ImGui::Text("Material");
 	ImGui::ColorEdit3("Ambient", (float*)&ambient);
 	ImGui::ColorEdit3("Diffuse", (float*)&diffuse);
 	ImGui::ColorEdit3("Specular", (float*)&specular);
-	ImGui::SliderFloat("Shininess", &shininess, 0.1f, 300.0f);
-	ImGui::End();
+	ImGui::SliderFloat("Shininess", &shininess, 1.0f, 128.0f);
+	ImGui::PopID();
 }

@@ -8,11 +8,12 @@
 #include "engine/renderer/light.h"
 #include "engine/renderer/mesh.h"
 #include "engine/renderer/gui.h"
-#include "engine/math/math.h"
+#include "engine/renderer/camera.h"
 
 int main(int argc, char** argv)
 {
 	filesystem::set_current_path("content");
+	Name::AllocNames();
 
 	int result = SDL_Init(SDL_INIT_VIDEO);
 	if (result != 0)
@@ -22,6 +23,10 @@ int main(int argc, char** argv)
 
 	std::shared_ptr<Input> input = std::make_shared<Input>();
 	input->Initialize();
+	input->AddAction("forward", SDL_SCANCODE_UP);
+	input->AddAction("backward", SDL_SCANCODE_DOWN);
+	input->AddAction("pitch", Input::eAxis::Y, Input::MOUSE);
+	input->AddAction("yaw", Input::eAxis::X, Input::MOUSE);
 
 	std::shared_ptr<Renderer> renderer = std::make_shared<Renderer>();
 	renderer->Initialize(1280, 720, false);
@@ -41,30 +46,35 @@ int main(int argc, char** argv)
 	shader->SetUniform("fog.distance_max", 30.0f);
 	shader->SetUniform("fog.color", glm::vec3(0.8f));
 	
-	Material material;
-	material.ambient = glm::vec3(1.0f);
-	material.diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
-	material.specular = glm::vec3(1.0f);
-	material.shininess = 128.0f;
+	Allocator<Material> material_allocator;
 
-	Texture* texture = new Texture();
-	texture->CreateTexture("textures/uvgrid.jpg");
-	material.textures.push_back(texture);
+	std::shared_ptr<Material> material = material_allocator.Get("material");
+	material->ambient = glm::vec3(1.0f);
+	material->diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
+	material->specular = glm::vec3(1.0f);
+	material->shininess = 128.0f;
 
-	material.SetShader(shader);
-	material.Use();
+	Allocator<Texture> texture_allocator;
+	std::shared_ptr<Texture> texture = texture_allocator.Get("textures/uvgrid.jpg");
+
+	material->textures.push_back(texture);
+	material->SetShader(shader);
+	material->Use();
 
 	Light light;
-	light.position = glm::vec4(5.0f, 5.0f, 5.0f, 1.0f);
+	light.Create("light");
+	light.GetTransform().translation = glm::vec3(5.0f, 5.0f, 5.0f);
 	light.ambient = glm::vec3(0.1f);
 	light.diffuse = glm::vec3(1.0f);
 	light.specular = glm::vec3(1.0f);
 
-	glm::mat4 mxTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
-	glm::mat4 mxRotate = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-	
-	glm::mat4 mxView = glm::lookAt(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 mxProjection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.01f, 1000.0f);
+	Transform transform(glm::vec3(0.0f, 0.0f, -5.0f));
+
+	Camera camera;
+	camera.GetTransform() = glm::lookAt(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	camera.SetProjection(45.0f, 1280.0f / 720.0f, 0.01f, 1000.0f);
+
+	int steps = 4;
 
 	bool quit = false;
 	while (!quit)
@@ -86,28 +96,43 @@ int main(int argc, char** argv)
 		SDL_PumpEvents();
 
 		g_timer.tick();
+		input->Update();
 		
+		//glm::vec3 camera_rotate(0.0f);
+		//camera_rotate.x = input->GetAxisRelative("pitch") * 0.001f;
+		//camera_rotate.y = input->GetAxisRelative("yaw") * 0.001f;
+
+		//glm::quat qcamera = glm::quat(camera_rotate);
+		//glm::quat qpitch = glm::angleAxis(camera_rotate.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		//glm::quat qyaw = glm::angleAxis(camera_rotate.y, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		////camera.GetTransform().rotation = glm::normalize(camera.GetTransform().rotation * qpitch);
+		////camera.GetTransform().rotation = qcamera * camera.GetTransform().rotation;
+		//camera.GetTransform().rotation = qpitch * camera.GetTransform().rotation * qyaw;
+		////camera.GetTransform().rotation = qpitch * camera.GetTransform().rotation;
+		//camera.GetTransform().rotation = glm::normalize(camera.GetTransform().rotation);
+
 		glm::vec3 translate(0.0f, 0.0f, 0.0f);
 		float speed = 10.0f;
-		if (input->GetKey(SDL_SCANCODE_RIGHT))	translate.x = speed;
-		if (input->GetKey(SDL_SCANCODE_LEFT))	translate.x = -speed;
-		if (input->GetKey(SDL_SCANCODE_UP))		translate.y = speed;
-		if (input->GetKey(SDL_SCANCODE_DOWN))	translate.y = -speed;
-		if (input->GetKey(SDL_SCANCODE_W))		translate.z = speed;
-		if (input->GetKey(SDL_SCANCODE_S))		translate.z = -speed;
+		if (input->GetButton("forward", Input::HELD))		translate.z = speed;
+		if (input->GetButton("backward", Input::HELD))		translate.z = -speed;
 		
-		mxTranslate = glm::translate(mxTranslate, translate * g_timer.dt());
-		mxRotate = glm::rotate(mxRotate, glm::radians(45.0f) * g_timer.dt(), glm::vec3(0.0f, 1.0f, 0.0f));
-		glm::mat4 mxModel = mxTranslate * mxRotate;
+		glm::quat r = glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
+		transform.rotation = transform.rotation * r;
 
-		glm::mat4 model_view_matrix = mxView * mxModel;
+		glm::mat4 model_view_matrix = camera.GetTransform().GetMatrix() * transform.GetMatrix();
 		shader->SetUniform("model_view_matrix", model_view_matrix);
-		glm::mat4 mvp_matrix = mxProjection * model_view_matrix;
+		glm::mat4 mvp_matrix = camera.GetProjection() * model_view_matrix;
 		shader->SetUniform("mvp_matrix", mvp_matrix);
 
 		// set shader uniforms
-		light.SetShader(shader, mxView);
-		material.SetShader(shader);
+		light.SetShader(shader, camera.GetTransform());
+		material->SetShader(shader);
+
+		//shader->SetUniform("steps", steps);
+		shader->SetUniform("fog.min_distance", 10.0f);
+		shader->SetUniform("fog.max_distance", 30.0f);
+		shader->SetUniform("fog.color", glm::vec3(0.85f));
 
 		// gui
 		GUI::Update(event);
@@ -115,8 +140,9 @@ int main(int argc, char** argv)
 
 		ImGui::Text("Hello World");
 		light.Edit();
-		material.Edit();
+		material->Edit();
 		ImGui::Button("Pause");
+		ImGui::SliderInt("Steps", &steps, 1, 16);
 
 		GUI::End();
 
@@ -127,11 +153,13 @@ int main(int argc, char** argv)
 		renderer->SwapBuffer();
 	}
 	delete shader;
-	material.Destroy();
+	material->Destroy();
 
 	GUI::Shutdown();
 	input->Shutdown();
 	renderer->Shutdown();
+
+	Name::FreeNames();
 
 	SDL_Quit();
 

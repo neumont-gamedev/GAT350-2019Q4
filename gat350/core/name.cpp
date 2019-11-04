@@ -9,25 +9,18 @@ Name::Name(const char* string, bool unique)
 {
 	ASSERT(strlen(string) < MAX_NAME_SIZE);
 
-	char string_lower[MAX_NAME_SIZE];
-	string_to_lower(string, string_lower, MAX_NAME_SIZE);
+	std::string name_string(string);
+	std::transform(name_string.begin(), name_string.end(), name_string.begin(), std::tolower);
 
 	if (unique)
 	{
-		std::string unique_string(string_lower);
-		unique_string += std::to_string(ms_unique_id);
+		name_string += std::to_string(ms_unique_id);
 		ms_unique_id++;
+	}
 
-		m_id = static_cast<u32>(std::hash<std::string>{}(unique_string.c_str()));
-		m_index = m_id % MAX_ENTRIES;
-		strcpy_s(ms_names + (m_index * MAX_NAME_SIZE), MAX_NAME_SIZE, unique_string.c_str());
-	}
-	else
-	{
-		m_id = static_cast<u32>(std::hash<std::string>{}(string_lower));
-		m_index = m_id % MAX_ENTRIES;
-		strcpy_s(ms_names + (m_index * MAX_NAME_SIZE), MAX_NAME_SIZE, string);
-	}
+	m_id = std::hash<std::string>{}(name_string.c_str());
+	m_index = m_id % MAX_ENTRIES;
+	strcpy_s(ms_names + (m_index * MAX_NAME_SIZE), MAX_NAME_SIZE, name_string.c_str());
 }
 
 bool Name::operator==(const Name& other) const

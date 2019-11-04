@@ -26,6 +26,12 @@
     <Filter Include="external">
       <UniqueIdentifier>{8bd007e3-f688-4f67-a45d-01b416a05e57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\framework">
+      <UniqueIdentifier>{f703e9d8-bad9-453c-8792-568ab1f5f524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\engine\framework">
+      <UniqueIdentifier>{dccc2826-159e-49bf-9361-2bd52ced219b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -112,6 +118,15 @@
     <ClCompile Include="..\external\imgui\examples\imgui_impl_sdl.cpp">
       <Filter>external</Filter>
     </ClCompile>
+    <ClCompile Include="framework\serialize.cpp">
+      <Filter>source\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\math\transform.cpp">
+      <Filter>source\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\renderer\camera.cpp">
+      <Filter>source\engine\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\assert.h">
@@ -186,12 +201,6 @@
     <ClInclude Include="engine\renderer\texture.h">
       <Filter>source\engine\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene.h">
-      <Filter>source\engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\system.h">
-      <Filter>source\engine</Filter>
-    </ClInclude>
     <ClInclude Include="engine\renderer\light.h">
       <Filter>source\engine\renderer</Filter>
     </ClInclude>
@@ -209,6 +218,39 @@
     </ClInclude>
     <ClInclude Include="engine\renderer\gui.h">
       <Filter>source\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\resource_manager.h">
+      <Filter>source\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\manager.h">
+      <Filter>source\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\allocator.h">
+      <Filter>source\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\serialize.h">
+      <Filter>source\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\renderer\camera.h">
+      <Filter>source\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\math\transform.h">
+      <Filter>source\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\framework\object.h">
+      <Filter>source\engine\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\framework\actor.h">
+      <Filter>source\engine\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\framework\scene.h">
+      <Filter>source\engine\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\framework\system.h">
+      <Filter>source\engine\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\framework\resource.h">
+      <Filter>source\engine\framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -30,6 +30,16 @@ namespace math
 		return glm::vec3(v.x / m, v.y / m, v.z /m);
 	}
 
+	glm::vec3 project(const glm::vec3& v1, const glm::vec3& v2)
+	{
+		return dot(v1, v2) / dot(v2, v2) * v2;
+	}
+
+	glm::vec3 reject(const glm::vec3& v1, const glm::vec3& v2)
+	{
+		return v1 - project(v1, v2);
+	}
+
 	glm::vec3 reflect(const glm::vec3& v, const glm::vec3& n)
 	{
 		return v - n * dot(n, v) * 2.0f;

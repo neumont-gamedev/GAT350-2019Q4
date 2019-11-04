@@ -26,6 +26,6 @@ private:
 
 private:
 	VertexIndexArray m_vertex_array;
-	Material m_material;
+	std::shared_ptr<Material> m_material;
 	std::string m_directory;
 };

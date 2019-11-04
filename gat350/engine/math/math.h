@@ -1,6 +1,10 @@
 #pragma once
 
-#include "../engine.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <vector>
 
 namespace math
 {
@@ -10,6 +14,8 @@ namespace math
 	
 	glm::vec3 cross(const glm::vec3& v0, const glm::vec3& v1);
 	glm::vec3 normalize(const glm::vec3& v);
+	glm::vec3 project(const glm::vec3& v, const glm::vec3& n);
+	glm::vec3 reject(const glm::vec3& v, const glm::vec3& n);
 	glm::vec3 reflect(const glm::vec3& v, const glm::vec3& n);
 
 	glm::vec3 calculate_normal(const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2);

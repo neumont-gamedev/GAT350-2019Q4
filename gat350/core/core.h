@@ -12,3 +12,4 @@
 #include "string.h"
 #include "reflection.h"
 #include "types.h"
+#include "name.h"

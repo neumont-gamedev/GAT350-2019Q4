@@ -4,13 +4,20 @@
 
 #define BMP_HEADER_SIZE 54
 
-Texture::~Texture()
+bool Texture::Create(const Name& name)
+{
+	return CreateTexture(name.c_str());
+}
+
+void Texture::Destroy()
 {
 	glDeleteTextures(1, &m_texture);
 }
 
-void Texture::CreateTexture(const std::string& filename, GLenum type, GLuint unit)
+bool Texture::CreateTexture(const std::string& filename, GLenum type, GLuint unit)
 {
+	bool success = false;
+
 	m_type = type;
 	m_unit = unit;
 
@@ -21,20 +28,26 @@ void Texture::CreateTexture(const std::string& filename, GLenum type, GLuint uni
 	u8* data = LoadImage(filename, width, height, channels);
 	ASSERT(data);
 
-	glGenTextures(1, &m_texture);
-	glBindTexture(type, m_texture);
+	if (data)
+	{
+		success = true;
+		glGenTextures(1, &m_texture);
+		glBindTexture(type, m_texture);
 
-	GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
-	glTexImage2D(type, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
+		glTexImage2D(type, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
-	glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 #ifdef STB_IMAGE_IMPLEMENTATION
-	stbi_image_free(data);
+		stbi_image_free(data);
 #else
-	delete data;
+		delete data;
 #endif
+	}
+
+	return success;
 }
 
 void Texture::Bind()

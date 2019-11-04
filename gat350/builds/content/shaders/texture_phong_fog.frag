@@ -28,9 +28,9 @@ uniform light_s light;
 
 struct fog_s
 {
-	float distance_min;
-	float distance_max;
-	vec3 color;
+	float min_distance;
+	float max_distance;
+	vec3 color; 
 };
 
 uniform fog_s fog;
@@ -60,10 +60,9 @@ void main()
 	}
 
 	vec4 phong_color = (vec4(ambient + diffuse, 1.0f) * texture(texture_sample, ftexcoord)) + vec4(specular, 1.0f);
-
-	float distance = abs(fposition.z);
-	float fog_intensity = (distance - fog.distance_min) / (fog.distance_max - fog.distance_min);
-	fog_intensity = clamp(fog_intensity, 0.0, 1.0);
 	
-	color =  mix(phong_color, vec4(fog.color, 1.0), fog_intensity);
+	float distance = abs(fposition.z);
+	float fog_intensity = (distance - fog.min_distance) / (fog.max_distance - fog.min_distance);
+	fog_intensity = clamp(fog_intensity, 0.0, 1.0);
+	color = mix(phong_color, vec4(fog.color, 1.0), fog_intensity);
 }
