@@ -1,11 +1,14 @@
 #pragma once
-#include "../engine.h"
+#include "../framework/resource.h"
 
-class Program
+class Program : public Resource
 {
 public:
-	Program() {}
+	OBJECT_DECLARATION(Program, Resource)
 	~Program();
+
+	bool Create(const Name& name) { m_name = name; return true; }
+	void Destroy() {}
 
 public:
 	void CreateShaderFromFile(const std::string& filename, GLenum shader_type);

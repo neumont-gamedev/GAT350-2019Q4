@@ -4,9 +4,10 @@
 class Transform
 {
 public:
-	Transform() : translation(0.0f), rotation(1.0f, 0.0f, 0.0f, 0.0f), scale(1.0f) {}
-	Transform(const glm::vec3& translation, const glm::quat& rotation = glm::quat(glm::vec3(0.0f)), const glm::vec3& scale = glm::vec3(1.0f))
+	Transform() : translation(0.0f), rotation(glm::vec3(0.0f)), scale(1.0f) {}
+	Transform(const glm::vec3& translation, const glm::vec3& rotation = glm::vec3(0.0f), const glm::vec3& scale = glm::vec3(1.0f))
 		: translation(translation), rotation(rotation), scale(scale) {}
+	Transform(const glm::mat4& matrix) { *this = matrix; }
 
 	inline glm::mat4 GetMatrix() const
 	{
@@ -31,6 +32,11 @@ public:
 		scale = glm::vec3(matrix[0][0], matrix[1][1], matrix[2][2]);
 
 		return *this;
+	}
+
+	inline void Rotate(const glm::quat& rotate)
+	{
+		rotation = rotation * rotate;
 	}
 
 	void Edit();

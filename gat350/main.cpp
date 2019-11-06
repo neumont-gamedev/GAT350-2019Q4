@@ -7,8 +7,13 @@
 #include "engine/renderer/material.h"
 #include "engine/renderer/light.h"
 #include "engine/renderer/mesh.h"
+#include "engine/renderer/model.h"
 #include "engine/renderer/gui.h"
 #include "engine/renderer/camera.h"
+#include "framework/factory.h"
+
+using ObjectFactory = Factory<Object, Name>;
+using ResourceManager = ObjectManager<Resource>;
 
 int main(int argc, char** argv)
 {
@@ -33,12 +38,23 @@ int main(int argc, char** argv)
 
 	GUI::Initialize(renderer.get());
 
-	Mesh mesh;
-	mesh.Load("meshes/sphere.obj");
+
+	std::shared_ptr<ObjectFactory> object_factory = std::make_shared<ObjectFactory>();
+	object_factory->Register("Texture", new Creator<Texture, Object>());
+	object_factory->Register("Model", new Creator<Model, Object>());
+	object_factory->Register("Program", new Creator<Program, Object>());
 	
-	Program* shader = new Program();
+	std::shared_ptr<ResourceManager> resource_manager = std::make_shared<ResourceManager>();
+
+	std::shared_ptr<Texture> ts1 = resource_manager->Get<Texture>("textures/uvgrid.jpg");
+	std::shared_ptr<Texture> ts2 = resource_manager->Get<Texture>("textures/uvgrid.jpg");
+	
+	//std::shared_ptr<Model> model = resource_manager->Get<Model>("meshes/cottage/cottage_obj.obj");
+	std::shared_ptr<Model> model = resource_manager->Get<Model>("meshes/cube.obj");
+		
+	std::unique_ptr<Program> shader = object_factory->Create<Program>("Program");
 	shader->CreateShaderFromFile("shaders/texture_phong.vert", GL_VERTEX_SHADER);
-	shader->CreateShaderFromFile("shaders/texture_phong_fog.frag", GL_FRAGMENT_SHADER);
+	shader->CreateShaderFromFile("shaders/texture_phong.frag", GL_FRAGMENT_SHADER);
 	shader->Link();
 	shader->Use();
 
@@ -46,33 +62,35 @@ int main(int argc, char** argv)
 	shader->SetUniform("fog.distance_max", 30.0f);
 	shader->SetUniform("fog.color", glm::vec3(0.8f));
 	
-	Allocator<Material> material_allocator;
-
-	std::shared_ptr<Material> material = material_allocator.Get("material");
+	std::shared_ptr<Material> material = resource_manager->Get<Material>("material");
 	material->ambient = glm::vec3(1.0f);
 	material->diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
 	material->specular = glm::vec3(1.0f);
 	material->shininess = 128.0f;
+	
+	//std::unique_ptr<Texture> t = std::make_unique<Texture>("textures/metal-diffuse.png");
+	//t->CreateTexture("textures/metal-diffuse.png", GL_TEXTURE_2D, GL_TEXTURE0);
+	//resource_manager->Add<Texture>("textures/metal-diffuse.png", t);
 
-	Allocator<Texture> texture_allocator;
-	std::shared_ptr<Texture> texture = texture_allocator.Get("textures/uvgrid.jpg");
+
+	std::shared_ptr<Texture> texture = resource_manager->Get<Texture>("textures/metal-diffuse.png");
 
 	material->textures.push_back(texture);
-	material->SetShader(shader);
+	material->SetShader(shader.get());
 	material->Use();
 
 	Light light;
 	light.Create("light");
-	light.GetTransform().translation = glm::vec3(5.0f, 5.0f, 5.0f);
+	light.GetTransform().translation = glm::vec3(10.0f);
 	light.ambient = glm::vec3(0.1f);
 	light.diffuse = glm::vec3(1.0f);
 	light.specular = glm::vec3(1.0f);
 
-	Transform transform(glm::vec3(0.0f, 0.0f, -5.0f));
+	Transform transform(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	Camera camera;
 	camera.GetTransform() = glm::lookAt(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	camera.SetProjection(45.0f, 1280.0f / 720.0f, 0.01f, 1000.0f);
+	camera.SetProjection(45.0f, 1280.0f / 720.0f, 0.01f, 100.0f);
 
 	int steps = 4;
 
@@ -98,17 +116,17 @@ int main(int argc, char** argv)
 		g_timer.tick();
 		input->Update();
 		
-		//glm::vec3 camera_rotate(0.0f);
-		//camera_rotate.x = input->GetAxisRelative("pitch") * 0.001f;
-		//camera_rotate.y = input->GetAxisRelative("yaw") * 0.001f;
+		glm::vec3 camera_rotate(0.0f);
+		camera_rotate.x = input->GetAxisRelative("pitch") * 0.001f;
+		camera_rotate.y = input->GetAxisRelative("yaw") * 0.001f;
 
 		//glm::quat qcamera = glm::quat(camera_rotate);
-		//glm::quat qpitch = glm::angleAxis(camera_rotate.x, glm::vec3(1.0f, 0.0f, 0.0f));
-		//glm::quat qyaw = glm::angleAxis(camera_rotate.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::quat qpitch = glm::angleAxis(camera_rotate.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		glm::quat qyaw = glm::angleAxis(camera_rotate.y, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		////camera.GetTransform().rotation = glm::normalize(camera.GetTransform().rotation * qpitch);
 		////camera.GetTransform().rotation = qcamera * camera.GetTransform().rotation;
-		//camera.GetTransform().rotation = qpitch * camera.GetTransform().rotation * qyaw;
+		camera.GetTransform().rotation = qpitch * camera.GetTransform().rotation * qyaw;
 		////camera.GetTransform().rotation = qpitch * camera.GetTransform().rotation;
 		//camera.GetTransform().rotation = glm::normalize(camera.GetTransform().rotation);
 
@@ -117,8 +135,9 @@ int main(int argc, char** argv)
 		if (input->GetButton("forward", Input::HELD))		translate.z = speed;
 		if (input->GetButton("backward", Input::HELD))		translate.z = -speed;
 		
-		glm::quat r = glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
-		transform.rotation = transform.rotation * r;
+		//glm::quat r = glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
+		//transform.rotation = transform.rotation * r;
+		transform.translation = transform.translation + translate * g_timer.dt();
 
 		glm::mat4 model_view_matrix = camera.GetTransform().GetMatrix() * transform.GetMatrix();
 		shader->SetUniform("model_view_matrix", model_view_matrix);
@@ -126,12 +145,12 @@ int main(int argc, char** argv)
 		shader->SetUniform("mvp_matrix", mvp_matrix);
 
 		// set shader uniforms
-		light.SetShader(shader, camera.GetTransform());
-		material->SetShader(shader);
+		light.SetShader(shader.get(), camera.GetTransform());
+		material->SetShader(shader.get());
 
 		//shader->SetUniform("steps", steps);
-		shader->SetUniform("fog.min_distance", 10.0f);
-		shader->SetUniform("fog.max_distance", 30.0f);
+		shader->SetUniform("fog.min_distance", 40.0f);
+		shader->SetUniform("fog.max_distance", 50.0f);
 		shader->SetUniform("fog.color", glm::vec3(0.85f));
 
 		// gui
@@ -149,11 +168,9 @@ int main(int argc, char** argv)
 		// render
 		renderer->ClearBuffer();
 		GUI::Draw();
-		mesh.Draw();
+		model->Draw();
 		renderer->SwapBuffer();
 	}
-	delete shader;
-	material->Destroy();
 
 	GUI::Shutdown();
 	input->Shutdown();

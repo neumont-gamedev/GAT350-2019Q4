@@ -4,15 +4,15 @@
 
 #define REFLECT_ENUM(data) {#data, data}
 
-template <typename T>
+template <typename TBase>
 struct property_t
 {
 	const char* name;
-	T data;
+	TBase data;
 };
 
-template <typename T>
-bit_mask_t CreateBitMask(T* properties, size_t size, std::vector<std::string>& strings)
+template <typename TBase>
+bit_mask_t CreateBitMask(TBase* properties, size_t size, std::vector<std::string>& strings)
 {
 	bit_mask_t bit_mask;
 

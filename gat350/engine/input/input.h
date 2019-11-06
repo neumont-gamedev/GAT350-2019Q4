@@ -68,8 +68,8 @@ protected:
 
 private:
 	// keyboard
-	Uint8* m_keystate = nullptr;
-	Uint8* m_prev_keystate = nullptr;
+	std::vector<Uint8> m_keystate;
+	std::vector<Uint8> m_prev_keystate;
 	int m_num_keys;
 
 	// mouse

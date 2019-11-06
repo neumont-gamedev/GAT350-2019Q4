@@ -10,22 +10,5 @@
 class Mesh
 {
 public:
-	Mesh() {}
-	~Mesh() {}
-	
-	void Draw(GLenum primitiveType = GL_TRIANGLES);
-	bool Load(const std::string& filename);
-
 	static bool Load(const std::string& filename, std::vector<glm::vec3>& positions, std::vector<glm::vec3>& normals, std::vector<glm::vec2>& texcoords);
-
-private:
-	void ProcessNode(aiNode* node, const aiScene* scene);
-	void ProcessMesh(aiMesh* mesh, const aiScene* scene);
-	void ProcessMaterial(aiMaterial* material, const aiScene* scene);
-	std::vector<Texture*> ProcessMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName);
-
-private:
-	VertexIndexArray m_vertex_array;
-	std::shared_ptr<Material> m_material;
-	std::string m_directory;
 };

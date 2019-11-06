@@ -4,13 +4,13 @@ bool Input::Initialize()
 {
 	// create keyboard state buffers
 	SDL_GetKeyboardState(&m_num_keys);
-	m_keystate = new Uint8[m_num_keys];
-	m_prev_keystate = new Uint8[m_num_keys];
+	m_keystate.resize(m_num_keys);
+	m_prev_keystate.resize(m_num_keys);
 
 	// set initial keyboard states
 	const Uint8* keystate = SDL_GetKeyboardState(nullptr);
-	memcpy(m_keystate, keystate, m_num_keys);
-	memcpy(m_prev_keystate, m_keystate, m_num_keys);
+	memcpy(m_keystate.data(), keystate, m_num_keys);
+	memcpy(m_prev_keystate.data(), m_keystate.data(), m_num_keys);
 
 	// set initial mouse buttons states
 	SDL_Point axis;
@@ -40,17 +40,16 @@ bool Input::Initialize()
 
 void Input::Shutdown()
 {
-	delete m_keystate;
-	delete m_prev_keystate;
+	//
 }
 
 void Input::Update()
 {
 	// set previous keyboard state
-	memcpy(m_prev_keystate, m_keystate, m_num_keys);
+	memcpy(m_prev_keystate.data(), m_keystate.data(), m_num_keys);
 	// get current keyboard state
 	const Uint8* keystate = SDL_GetKeyboardState(nullptr);
-	memcpy(m_keystate, keystate, m_num_keys);
+	memcpy(m_keystate.data(), keystate, m_num_keys);
 
 	// set previous mouse state
 	m_prev_mouse_buttonstate = m_mouse_buttonstate;

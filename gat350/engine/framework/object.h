@@ -1,10 +1,18 @@
 #pragma once
 #include "../engine.h"
+#include "../../framework/factory.h"
 
 #define OBJECT_DECLARATION(class_name, super_class_name) \
 	class_name() {} \
 	class_name(const Name& name) : super_class_name(name) {} \
 	virtual const char* GetClassName() { return #class_name; }
+
+#define OBJECT_FACTORY(class_name) \
+	class FactoryRegister \
+	{ \
+	public: \
+		FactoryRegister() { ObjectFactory::Register(#class_name, new Creator<class_name, Object>()); } \
+	} instance;
 
 class Object
 {

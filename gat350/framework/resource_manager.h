@@ -9,8 +9,8 @@ public:
 	ResourceManager(Renderer* renderer) : m_renderer(renderer) {}
 	~ResourceManager();
 
-	template<typename T = TBase>
-	T* Get(const Name& name);
+	template<typename TBase = TBase>
+	TBase* Get(const Name& name);
 
 	void Add(const Name& name, TBase* element);
 	void Remove(const Name& name) override;
@@ -24,20 +24,20 @@ inline ResourceManager<TBase, N>::~ResourceManager()
 }
 
 template<typename TBase, size_t N>
-template<typename T>
-T* ResourceManager<TBase, N>::Get(const Name& name)
+template<typename TBase>
+TBase* ResourceManager<TBase, N>::Get(const Name& name)
 {
 	u32 index = name.GetID() % N;
 	TBase* element = Manager<TBase, N>::m_elements[index];
 
 	if (element == nullptr)
 	{
-		element = new T(m_renderer);
+		element = new TBase(m_renderer);
 		element->Create(name);
 		Manager<TBase, N>::m_elements[index] = element;
 	}
 
-	return dynamic_cast<T*>(element);
+	return dynamic_cast<TBase*>(element);
 }
 
 template<typename TBase, size_t N>

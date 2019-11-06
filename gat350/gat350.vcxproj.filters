@@ -118,14 +118,14 @@
     <ClCompile Include="..\external\imgui\examples\imgui_impl_sdl.cpp">
       <Filter>external</Filter>
     </ClCompile>
-    <ClCompile Include="framework\serialize.cpp">
-      <Filter>source\framework</Filter>
-    </ClCompile>
     <ClCompile Include="engine\math\transform.cpp">
       <Filter>source\engine\math</Filter>
     </ClCompile>
     <ClCompile Include="engine\renderer\camera.cpp">
       <Filter>source\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\stream.cpp">
+      <Filter>source\framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -219,18 +219,6 @@
     <ClInclude Include="engine\renderer\gui.h">
       <Filter>source\engine\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="framework\resource_manager.h">
-      <Filter>source\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="framework\manager.h">
-      <Filter>source\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="framework\allocator.h">
-      <Filter>source\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="framework\serialize.h">
-      <Filter>source\framework</Filter>
-    </ClInclude>
     <ClInclude Include="engine\renderer\camera.h">
       <Filter>source\engine\renderer</Filter>
     </ClInclude>
@@ -251,6 +239,15 @@
     </ClInclude>
     <ClInclude Include="engine\framework\resource.h">
       <Filter>source\engine\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\factory.h">
+      <Filter>source\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\stream.h">
+      <Filter>source\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\object_manager.h">
+      <Filter>source\framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -294,6 +291,9 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="builds\content\shaders\texture_phong_fog.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\texture_phong_specular.frag">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

@@ -2,7 +2,7 @@
 
 #include "../core/name.h"
 
-template <typename T, size_t N = 65536>
+template <typename TBase, size_t N = 65536>
 class Manager
 {
 public:
@@ -13,17 +13,17 @@ public:
 	virtual void RemoveAll() = 0;
 
 protected:
-	T** m_elements;
+	TBase** m_elements;
 };
 
-template<typename T, size_t N>
-inline Manager<T, N>::Manager()
+template<typename TBase, size_t N>
+inline Manager<TBase, N>::Manager()
 {
-	m_elements = new T * [N]();
+	m_elements = new TBase * [N]();
 }
 
-template<typename T, size_t N>
-inline Manager<T, N>::~Manager()
+template<typename TBase, size_t N>
+inline Manager<TBase, N>::~Manager()
 {
 	delete m_elements;
 }

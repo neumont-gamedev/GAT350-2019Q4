@@ -20,3 +20,4 @@ void Camera::SetProjection(float fov, float aspect_ratio, float near_clip, float
 
 	m_projection = glm::perspective(glm::radians(fov), aspect_ratio, near_clip, far_clip);
 }
+

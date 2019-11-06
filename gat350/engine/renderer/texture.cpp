@@ -4,14 +4,16 @@
 
 #define BMP_HEADER_SIZE 54
 
-bool Texture::Create(const Name& name)
+Texture::~Texture()
 {
-	return CreateTexture(name.c_str());
+//	SDL_Log("texture destructor: %s", m_name.c_str());
+	glDeleteTextures(1, &m_texture);
 }
 
-void Texture::Destroy()
+bool Texture::Create(const Name& name)
 {
-	glDeleteTextures(1, &m_texture);
+	m_name = name;
+	return CreateTexture(name.c_str());
 }
 
 bool Texture::CreateTexture(const std::string& filename, GLenum type, GLuint unit)
@@ -59,7 +61,7 @@ void Texture::Bind()
 #ifdef STB_IMAGE_IMPLEMENTATION
 u8* Texture::LoadImage(const std::string& filename, int& width, int& height, int& channels)
 {
-	stbi_set_flip_vertically_on_load(true);
+	stbi_set_flip_vertically_on_load(false);
 	u8* image = stbi_load(filename.c_str(), &width, &height, &channels, 0);
 
 	return image;

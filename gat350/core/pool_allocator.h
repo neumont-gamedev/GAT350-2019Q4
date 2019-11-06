@@ -1,7 +1,7 @@
 #pragma once
 #include <list>
 
-template <typename T>
+template <typename TBase>
 class PoolAllocator
 {
 public:
@@ -11,7 +11,7 @@ public:
 	PoolAllocator(size_t size);
 	~PoolAllocator();
 
-	T* Get();
+	TBase* Get();
 	void Free(void* address);
 
 private:
@@ -19,39 +19,39 @@ private:
 	std::list<void*> m_freelist;
 };
 
-template<typename T>
-inline PoolAllocator<T>::PoolAllocator(size_t size)
+template<typename TBase>
+inline PoolAllocator<TBase>::PoolAllocator(size_t size)
 {
-	m_pool = new char[size * sizeof(T)];
+	m_pool = new char[size * sizeof(TBase)];
 	for (size_t i = 0; i < size; i++)
 	{
-		ptr_type current = static_cast<ptr_type>(m_pool) + (i * sizeof(T));
+		ptr_type current = static_cast<ptr_type>(m_pool) + (i * sizeof(TBase));
 		m_freelist.push_back(current);
 	}
 }
 
-template<typename T>
-inline PoolAllocator<T>::~PoolAllocator()
+template<typename TBase>
+inline PoolAllocator<TBase>::~PoolAllocator()
 {
 	delete m_pool;
 }
 
-template<typename T>
-inline T* PoolAllocator<T>::Get()
+template<typename TBase>
+inline TBase* PoolAllocator<TBase>::Get()
 {
-	T* element = nullptr;
+	TBase* element = nullptr;
 
 	if (m_freelist.empty() == false)
 	{
-		element = reinterpret_cast<T*>(m_freelist.front());
+		element = reinterpret_cast<TBase*>(m_freelist.front());
 		m_freelist.pop_front();
 	}
 
 	return element;
 }
 
-template<typename T>
-inline void PoolAllocator<T>::Free(void* element)
+template<typename TBase>
+inline void PoolAllocator<TBase>::Free(void* element)
 {
 	m_freelist.push_front(element);
 }
