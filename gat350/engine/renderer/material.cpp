@@ -2,10 +2,7 @@
 
 void Material::Destroy()
 {
-	for (Texture* texture : textures)
-	{
-		delete texture;
-	}
+	//
 }
 
 void Material::SetShader(class Program* shader)
@@ -18,7 +15,7 @@ void Material::SetShader(class Program* shader)
 
 void Material::Use()
 {
-	for (Texture* texture : textures)
+	for (const auto& texture : textures)
 	{
 		texture->Bind();
 	}

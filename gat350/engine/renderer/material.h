@@ -18,5 +18,5 @@ public:
 	glm::vec3 specular = glm::vec3(1.0f);
 	float shininess = 100.0f;
 
-	std::vector<Texture*> textures;
+	std::vector<std::shared_ptr<Texture>> textures;
 };

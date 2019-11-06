@@ -46,7 +46,7 @@ void Texture::Bind()
 #ifdef STB_IMAGE_IMPLEMENTATION
 u8* Texture::LoadImage(const std::string& filename, int& width, int& height, int& channels)
 {
-	stbi_set_flip_vertically_on_load(true);
+	stbi_set_flip_vertically_on_load(false);
 	u8* image = stbi_load(filename.c_str(), &width, &height, &channels, 0);
 
 	return image;
