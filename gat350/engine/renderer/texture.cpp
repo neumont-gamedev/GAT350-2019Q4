@@ -6,7 +6,6 @@
 
 Texture::~Texture()
 {
-//	SDL_Log("texture destructor: %s", m_name.c_str());
 	glDeleteTextures(1, &m_texture);
 }
 

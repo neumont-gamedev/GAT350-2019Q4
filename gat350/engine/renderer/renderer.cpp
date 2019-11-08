@@ -2,7 +2,7 @@
 
 bool Renderer::Initialize()
 {
-	return Initialize(800, 600, false);
+	return Initialize(1280, 720, false);
 }
 
 bool Renderer::Initialize(u32 width, u32 height, bool fullscreen)

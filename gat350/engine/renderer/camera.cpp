@@ -11,6 +11,10 @@ void Camera::Destroy()
 {
 }
 
+void Camera::Update()
+{
+}
+
 void Camera::SetProjection(float fov, float aspect_ratio, float near_clip, float far_clip)
 {
 	m_fov = fov;

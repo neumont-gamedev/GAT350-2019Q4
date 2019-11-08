@@ -27,7 +27,7 @@ struct light_s
 uniform light_s light;
 
 layout (binding = 0) uniform sampler2D texture_sample1;
-layout (binding = 0) uniform sampler2D texture_sample2;
+layout (binding = 1) uniform sampler2D texture_sample2;
 
 void main()
 {

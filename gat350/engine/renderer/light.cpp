@@ -8,10 +8,6 @@ bool Light::Create(const Name& name)
 	return true;
 }
 
-void Light::Destroy()
-{
-}
-
 void Light::SetShader(class Program* program, const glm::mat4& view)
 {
 	ASSERT(program);

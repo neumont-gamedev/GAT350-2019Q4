@@ -4,8 +4,7 @@
 class Renderer : public System
 {
 public:
-	Renderer() {}
-	~Renderer() {}
+	OBJECT_DECLARATION(Renderer, System)
 
 	bool Initialize();
 	bool Initialize(u32 width, u32 height, bool fullscreen = false);

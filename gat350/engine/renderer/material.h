@@ -10,7 +10,6 @@ public:
 	~Material() {}
 
 	bool Create(const Name& name);
-	void Destroy();
 
 	void SetShader(class Program* shader);
 	void Use();

@@ -44,8 +44,7 @@ public:
 	};
 
 public:
-	Input() {}
-	virtual ~Input() {}
+	OBJECT_DECLARATION(Input, System)
 
 	bool Initialize();
 	void Shutdown();

@@ -32,11 +32,11 @@
     <Filter Include="source\engine\framework">
       <UniqueIdentifier>{dccc2826-159e-49bf-9361-2bd52ced219b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\game">
+      <UniqueIdentifier>{c3c25d49-e4a9-4296-96cb-3b16211eab53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="core\assert.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
@@ -124,8 +124,14 @@
     <ClCompile Include="engine\renderer\camera.cpp">
       <Filter>source\engine\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="framework\stream.cpp">
-      <Filter>source\framework</Filter>
+    <ClCompile Include="engine\engine.cpp">
+      <Filter>source\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\main.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\game_scene.cpp">
+      <Filter>source\game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +188,6 @@
     </ClInclude>
     <ClInclude Include="engine\renderer\program.h">
       <Filter>source\engine\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\engine.h">
-      <Filter>source\engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\renderer\renderer.h">
       <Filter>source\engine\renderer</Filter>
@@ -243,11 +246,17 @@
     <ClInclude Include="framework\factory.h">
       <Filter>source\framework</Filter>
     </ClInclude>
-    <ClInclude Include="framework\stream.h">
-      <Filter>source\framework</Filter>
-    </ClInclude>
     <ClInclude Include="framework\object_manager.h">
       <Filter>source\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\def.h">
+      <Filter>source\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\engine.h">
+      <Filter>source\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="game\game_scene.h">
+      <Filter>source\game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

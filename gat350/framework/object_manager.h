@@ -9,7 +9,7 @@ class ObjectManager
 public:
 	ObjectManager() {}
 
-	void Add(const Name& name, const std::unique_ptr<TBase>& object);
+	void Add(const Name& name, std::unique_ptr<TBase> object);
 	void Remove(const Name& name);
 
 	template<typename T = TBase>
@@ -20,16 +20,12 @@ private:
 };
 
 template<typename TBase>
-inline void ObjectManager<TBase>::Add(const Name& name, const std::unique_ptr<TBase>& object)
+inline void ObjectManager<TBase>::Add(const Name& name, std::unique_ptr<TBase> object)
 {
 	auto iter = m_objects.find(name);
 	if (iter == m_objects.end())
 	{
-		object = std::make_shared<TBase>(object);
-		if (object->Create(name))
-		{
-			m_objects[name] = object;
-		}
+		m_objects[name] = std::move(object);
 	}
 }
 

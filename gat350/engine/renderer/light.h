@@ -8,7 +8,6 @@ public:
 	~Light() {}
 
 	bool Create(const Name& name);
-	void Destroy();
 
 	void SetShader(class Program* program, const glm::mat4& view);
 	void Edit();

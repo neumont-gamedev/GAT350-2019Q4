@@ -1,11 +1,7 @@
 #pragma once
-#include "../engine.h"
+#include "../def.h"
 #include "vertex_index_array.h"
 #include "material.h"
-
-#include <assimp/importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 
 class Mesh
 {

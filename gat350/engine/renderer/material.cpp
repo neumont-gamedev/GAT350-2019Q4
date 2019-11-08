@@ -5,11 +5,6 @@ bool Material::Create(const Name& name)
 	return true;
 }
 
-void Material::Destroy()
-{
-	//
-}
-
 void Material::SetShader(class Program* shader)
 {
 	shader->SetUniform("material.ambient", ambient);
