@@ -163,7 +163,9 @@
     <ClCompile Include="engine\renderer\texture.cpp" />
     <ClCompile Include="engine\renderer\vertex_array.cpp" />
     <ClCompile Include="engine\renderer\vertex_index_array.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="game\game_scene.cpp" />
+    <ClCompile Include="game\main.cpp" />
+    <ClCompile Include="Z:\GAT350\engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\assert.h" />
@@ -183,6 +185,7 @@
     <ClInclude Include="core\string.h" />
     <ClInclude Include="core\timer.h" />
     <ClInclude Include="core\types.h" />
+    <ClInclude Include="engine\def.h" />
     <ClInclude Include="engine\engine.h" />
     <ClInclude Include="engine\framework\actor.h" />
     <ClInclude Include="engine\framework\object.h" />
@@ -202,6 +205,9 @@
     <ClInclude Include="engine\renderer\texture.h" />
     <ClInclude Include="engine\renderer\vertex_array.h" />
     <ClInclude Include="engine\renderer\vertex_index_array.h" />
+    <ClInclude Include="framework\factory.h" />
+    <ClInclude Include="framework\object_manager.h" />
+    <ClInclude Include="game\game_scene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="builds\content\shaders\basic.frag" />

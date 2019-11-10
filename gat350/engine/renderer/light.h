@@ -9,7 +9,6 @@ public:
 	virtual ~Light() {}
 
 	virtual bool Create(const Name& name) { m_name = name; return true; }
-	virtual void Destroy() {}
 
 	void SetShader(class Program* program, const glm::mat4& view_matrix);
 	void Edit();

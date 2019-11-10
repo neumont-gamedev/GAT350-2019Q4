@@ -5,7 +5,7 @@
 class Renderer : public System
 {
 public:
-	Renderer() {}
+	OBJECT_DECLARATION(Renderer, System)
 	~Renderer() {}
 
 	bool Initialize();

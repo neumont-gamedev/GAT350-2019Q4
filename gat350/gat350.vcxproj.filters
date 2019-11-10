@@ -29,11 +29,14 @@
     <Filter Include="source\engine\framework">
       <UniqueIdentifier>{e16b2b98-1cd0-4767-8f17-2e79573ccb33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\game">
+      <UniqueIdentifier>{63eed8b5-7223-4c71-9ac6-6b5bb8133ac8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\framework">
+      <UniqueIdentifier>{195ed6a3-3e5a-4f47-acf7-f64e68d232ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="core\assert.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
@@ -117,6 +120,15 @@
     </ClCompile>
     <ClCompile Include="engine\math\transform.cpp">
       <Filter>source\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="game\main.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\game_scene.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
+    <ClCompile Include="Z:\GAT350\engine.cpp">
+      <Filter>source\engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +239,18 @@
     </ClInclude>
     <ClInclude Include="engine\framework\scene.h">
       <Filter>source\engine\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\factory.h">
+      <Filter>source\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\object_manager.h">
+      <Filter>source\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\def.h">
+      <Filter>source\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="game\game_scene.h">
+      <Filter>source\game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

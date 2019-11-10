@@ -1,13 +1,14 @@
 #pragma once
-#include "../engine.h"
+#include "../framework/resource.h"
 #include "texture.h"
 #include "program.h"
 
-class Material
+class Material : public Resource
 {
 public:
-	void Destroy();
-
+	OBJECT_DECLARATION(Material, Resource)
+	virtual ~Material() {}
+	
 	void SetShader(class Program* shader);
 	void Use();
 

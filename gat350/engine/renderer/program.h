@@ -1,10 +1,10 @@
 #pragma once
-#include "../engine.h"
+#include "../framework/resource.h"
 
-class Program
+class Program : public Resource
 {
 public:
-	Program() {}
+	OBJECT_DECLARATION(Program, Resource)
 	~Program();
 
 public:

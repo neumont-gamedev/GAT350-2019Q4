@@ -1,10 +1,5 @@
 #include "material.h"
 
-void Material::Destroy()
-{
-	//
-}
-
 void Material::SetShader(class Program* shader)
 {
 	shader->SetUniform("material.ambient", ambient);
