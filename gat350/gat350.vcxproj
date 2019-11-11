@@ -150,9 +150,13 @@
     <ClCompile Include="core\random.cpp" />
     <ClCompile Include="core\string.cpp" />
     <ClCompile Include="core\timer.cpp" />
+    <ClCompile Include="engine\engine.cpp" />
+    <ClCompile Include="engine\framework\actor.cpp" />
+    <ClCompile Include="engine\framework\scene.cpp" />
     <ClCompile Include="engine\input\input.cpp" />
     <ClCompile Include="engine\math\math.cpp" />
     <ClCompile Include="engine\math\transform.cpp" />
+    <ClCompile Include="engine\renderer\camera.cpp" />
     <ClCompile Include="engine\renderer\gui.cpp" />
     <ClCompile Include="engine\renderer\light.cpp" />
     <ClCompile Include="engine\renderer\material.cpp" />
@@ -165,7 +169,6 @@
     <ClCompile Include="engine\renderer\vertex_index_array.cpp" />
     <ClCompile Include="game\game_scene.cpp" />
     <ClCompile Include="game\main.cpp" />
-    <ClCompile Include="Z:\GAT350\engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\assert.h" />
@@ -195,6 +198,7 @@
     <ClInclude Include="engine\input\input.h" />
     <ClInclude Include="engine\math\math.h" />
     <ClInclude Include="engine\math\transform.h" />
+    <ClInclude Include="engine\renderer\camera.h" />
     <ClInclude Include="engine\renderer\gui.h" />
     <ClInclude Include="engine\renderer\light.h" />
     <ClInclude Include="engine\renderer\material.h" />

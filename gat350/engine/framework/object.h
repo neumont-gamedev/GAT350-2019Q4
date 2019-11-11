@@ -15,14 +15,11 @@ public:
 	Object(const Name& name, class Engine* engine) : m_name(name), m_engine(engine) {}
 	virtual ~Object() {}
 
-	virtual bool Create(const Name& name) { m_name = name; return true; }
-
-	void SetName(const Name& name) { m_name = name; }
-	Name& GetName() { return m_name; }
+	virtual bool Create(const Name& name) { this->m_name = name; return true; }
 	 
 	inline virtual void Edit() { ImGui::Text(m_name.c_str()); }
 
-protected:
+public:
 	Name m_name;
 	class Engine* m_engine = nullptr;
 };

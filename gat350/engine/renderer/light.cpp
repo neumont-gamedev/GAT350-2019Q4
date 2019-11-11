@@ -1,16 +1,22 @@
 #include "light.h"
 #include "program.h"
+#include "camera.h"
 
-void Light::SetShader(class Program* program, const glm::mat4& view_matrix)
+void Light::SetShader(Program* program)
 {
 	ASSERT(program);
 
+	program->Use();
 	program->SetUniform("light.ambient", ambient);
 	program->SetUniform("light.diffuse", diffuse);
 	program->SetUniform("light.specular", specular);
 
-	glm::mat4 light_view_matrix = m_transform.GetMatrix() * view_matrix;
-	program->SetUniform("light.position", glm::vec4(m_transform.translation, 1.0f) * view_matrix);
+	std::vector<Camera*> cameras = m_scene->Get<Camera>();
+	ASSERT(!cameras.empty());
+
+	glm::mat4 light_view_matrix = m_transform.GetMatrix() * cameras[0]->view_matrix;
+	glm::vec4 position = light_view_matrix[3];
+	program->SetUniform("light.position", position);
 }
 
 void Light::Edit()

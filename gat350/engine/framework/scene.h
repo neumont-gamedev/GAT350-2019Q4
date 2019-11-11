@@ -7,20 +7,17 @@ public:
 	OBJECT_DECLARATION(Scene, Object)
 	virtual ~Scene() {}
 
-	virtual void Update() = 0;
-	virtual void Draw() = 0;
+	virtual void Update();
+	virtual void Draw();
 
-	void AddObject(std::unique_ptr<Actor> actor)
-	{
-		m_actors.push_back(std::move(actor));
-	}
+	void Add(std::unique_ptr<Actor> actor);
 
 	template<typename T>
-	T* GetObject(const Name& name)
+	T* Get(const Name& name)
 	{
 		for (auto& actor : m_actors)
 		{
-			if (actor->GetName() == name)
+			if (actor->m_name == name)
 			{
 				return dynamic_cast<T*>(actor.get());
 			}
@@ -30,14 +27,14 @@ public:
 	}
 
 	template<typename T>
-	std::vector<T*> GetObjects()
+	std::vector<T*> Get()
 	{
 		std::vector<T*> actors;
-		for (auto actor : m_actors)
+		for (auto& actor : m_actors)
 		{
-			if (dynamic_cast<T*>(actor) != nullptr)
+			if (dynamic_cast<T*>(actor.get()) != nullptr)
 			{
-				actors.push_back(dynamic_cast<T*>(actor));
+				actors.push_back(dynamic_cast<T*>(actor.get()));
 			}
 		}
 

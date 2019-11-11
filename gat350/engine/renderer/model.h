@@ -1,20 +1,18 @@
 #pragma once
-#include "../engine.h"
+#include "../framework/actor.h"
+#include "mesh.h"
+#include "program.h"
 
-class Model
+class Model : public Actor
 {
 public:
-	Model() {}
+	OBJECT_DECLARATION(Model, Actor)
 	~Model() {}
 
-	void Load(const std::string& filename);
+	void Update() override;
+	void Draw(GLenum primitiveType = GL_TRIANGLES) override;
 
-private:
-	//void ProcessNode(aiNode* node, const aiScene* scene);
-	//void ProcessMesh(aiMesh* mesh, const aiScene* scene);
-
-
-private:
-	std::vector<class Mesh*> m_meshes;
-	std::string m_directory;
+public:
+	std::shared_ptr<Mesh> m_mesh;
+	std::shared_ptr<Program> m_shader;
 };

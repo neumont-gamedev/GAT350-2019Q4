@@ -1,9 +1,19 @@
 #include "mesh.h"
 
+bool Mesh::Create(const Name& name)
+{
+	return Load(name.c_str());
+}
+
 void Mesh::Draw(GLenum primitiveType)
 {
-	m_material.Use();
+	m_material->Use();
 	m_vertex_array.Draw(primitiveType);
+}
+
+void Mesh::SetShader(Program* shader)
+{
+	m_material->SetShader(shader);
 }
 
 bool Mesh::Load(const std::string& filename)
@@ -110,7 +120,7 @@ void Mesh::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 	if (material)
 	{
-		ProcessMaterial(material, scene);
+		//ProcessMaterial(material, scene);
 	}
 }
 
@@ -121,29 +131,29 @@ void Mesh::ProcessMaterial(aiMaterial* material, const aiScene* scene)
 
 	if (material->Get(AI_MATKEY_COLOR_AMBIENT, color) == AI_SUCCESS)
 	{
-		m_material.ambient = glm::vec3(color.r, color.g, color.b);
+		m_material->ambient = glm::vec3(color.r, color.g, color.b);
 	}
 
 	if (material->Get(AI_MATKEY_COLOR_DIFFUSE, color) == AI_SUCCESS)
 	{
-		m_material.diffuse = glm::vec3(color.r, color.g, color.b);
+		m_material->diffuse = glm::vec3(color.r, color.g, color.b);
 	}
 
 	if (material->Get(AI_MATKEY_COLOR_SPECULAR, color) == AI_SUCCESS)
 	{
-		m_material.specular = glm::vec3(color.r, color.g, color.b);
+		m_material->specular = glm::vec3(color.r, color.g, color.b);
 	}
 		
 	if (material->Get(AI_MATKEY_SHININESS, shininess) == AI_SUCCESS)
 	{
-		m_material.shininess = shininess;
+		m_material->shininess = shininess;
 	}
 
 	std::vector<Texture*> diffuse_textures = ProcessMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-	m_material.textures.insert(m_material.textures.end(), diffuse_textures.begin(), diffuse_textures.end());
+	m_material->textures.insert(m_material->textures.end(), diffuse_textures.begin(), diffuse_textures.end());
 
 	std::vector<Texture*> normal_textures = ProcessMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
-	m_material.textures.insert(m_material.textures.end(), normal_textures.begin(), normal_textures.end());
+	m_material->textures.insert(m_material->textures.end(), normal_textures.begin(), normal_textures.end());
 }
 
 std::vector<Texture*> Mesh::ProcessMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName)

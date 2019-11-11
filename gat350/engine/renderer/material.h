@@ -13,6 +13,7 @@ public:
 	void Use();
 
 	void Edit();
+
 public:
 	glm::vec3 ambient = glm::vec3(0.0f);
 	glm::vec3 diffuse = glm::vec3(1.0f);

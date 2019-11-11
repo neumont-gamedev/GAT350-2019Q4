@@ -127,8 +127,17 @@
     <ClCompile Include="game\game_scene.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
-    <ClCompile Include="Z:\GAT350\engine.cpp">
+    <ClCompile Include="engine\engine.cpp">
       <Filter>source\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\framework\actor.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\renderer\camera.cpp">
+      <Filter>source\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\framework\scene.cpp">
+      <Filter>source\engine\framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +260,9 @@
     </ClInclude>
     <ClInclude Include="game\game_scene.h">
       <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\renderer\camera.h">
+      <Filter>source\engine\renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

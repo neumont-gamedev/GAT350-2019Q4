@@ -8,9 +8,9 @@ public:
 	OBJECT_DECLARATION(Light, Actor)
 	virtual ~Light() {}
 
-	virtual bool Create(const Name& name) { m_name = name; return true; }
+	//virtual bool Create(const Name& name) { this->name = name; return true; }
 
-	void SetShader(class Program* program, const glm::mat4& view_matrix);
+	void SetShader(class Program* program);
 	void Edit();
 
 public:

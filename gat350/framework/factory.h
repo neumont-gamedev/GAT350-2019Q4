@@ -30,7 +30,7 @@ public:
 	std::unique_ptr<T> Create(TKey key);
 	void Register(TKey key, CreatorBase<TBase>* creator);
 
-private:
+protected:
 	using registry_t = std::map<TKey, std::unique_ptr<CreatorBase<TBase>>>;
 	registry_t m_registry;
 };

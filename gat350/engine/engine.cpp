@@ -38,11 +38,12 @@ bool Engine::Initialize()
 	// factory
 	m_factory = std::make_unique<object_factory_t>();
 	m_factory->Register(Texture::GetClassName(), new Creator<Texture, Object>());
-	m_factory->Register(Model::GetClassName(), new Creator<Model, Object>());
+	m_factory->Register(Mesh::GetClassName(), new Creator<Mesh, Object>());
 	m_factory->Register(Program::GetClassName(), new Creator<Program, Object>());
 	m_factory->Register(Material::GetClassName(), new Creator<Material, Object>());
 	m_factory->Register(Camera::GetClassName(), new Creator<Camera, Object>());
 	m_factory->Register(Light::GetClassName(), new Creator<Light, Object>());
+	m_factory->Register(Model::GetClassName(), new Creator<Model, Object>());
 
 	// resources
 	m_resources = std::make_unique<resource_manager_t>();
