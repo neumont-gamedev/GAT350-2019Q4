@@ -12,7 +12,7 @@ public:
 	virtual ~Actor() {}
 
 	virtual void Update() {}
-	virtual void Draw(GLenum primitiveType = GL_TRIANGLES);
+	virtual void Draw(GLenum primitiveType = GL_TRIANGLES) {}
 
 	virtual void Edit()
 	{ 

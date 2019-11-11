@@ -130,9 +130,6 @@
     <ClCompile Include="engine\engine.cpp">
       <Filter>source\engine</Filter>
     </ClCompile>
-    <ClCompile Include="engine\framework\actor.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="engine\renderer\camera.cpp">
       <Filter>source\engine\renderer</Filter>
     </ClCompile>
