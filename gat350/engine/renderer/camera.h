@@ -11,8 +11,8 @@ public:
 	void SetProjection(float fov, float aspect_ratio, float near_clip, float far_clip);
 
 public:
-	glm::mat4 view_matrix;
-	glm::mat4 projection_matrix;
+	glm::mat4 m_view_matrix;
+	glm::mat4 m_projection_matrix;
 
 	float fov;
 	float aspect_ratio;

@@ -14,7 +14,7 @@ void Light::SetShader(Program* program)
 	std::vector<Camera*> cameras = m_scene->Get<Camera>();
 	ASSERT(!cameras.empty());
 
-	glm::mat4 light_view_matrix = m_transform.GetMatrix() * cameras[0]->view_matrix;
+	glm::mat4 light_view_matrix = m_transform.GetMatrix() * cameras[0]->m_view_matrix;
 	glm::vec4 position = light_view_matrix[3];
 	program->SetUniform("light.position", position);
 }

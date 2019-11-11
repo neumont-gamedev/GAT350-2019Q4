@@ -1,24 +1,17 @@
 #include "game_scene.h"
-#include "../engine/input/input.h"
 #include "../engine/engine.h"
 #include "../engine/renderer/renderer.h"
 #include "../engine/renderer/program.h"
-#include "../engine/renderer/vertex_index_array.h"
 #include "../engine/renderer/texture.h"
 #include "../engine/renderer/material.h"
 #include "../engine/renderer/light.h"
 #include "../engine/renderer/mesh.h"
 #include "../engine/renderer/model.h"
-#include "../engine/renderer/gui.h"
 #include "../engine/renderer/camera.h"
+#include "../engine/renderer/gui.h"
 
 bool GameScene::Create(const Name& name)
 {
-	//m_engine->Get<Input>()->AddAction("forward", SDL_SCANCODE_UP);
-	//m_engine->Get<Input>()->AddAction("backward", SDL_SCANCODE_DOWN);
-	//m_engine->Get<Input>()->AddAction("pitch", Input::eAxis::Y, Input::MOUSE);
-	//m_engine->Get<Input>()->AddAction("yaw", Input::eAxis::X, Input::MOUSE);
-
 	// shader
 	auto shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
 	shader->m_name = "shader";
@@ -27,14 +20,6 @@ bool GameScene::Create(const Name& name)
 	shader->CreateShaderFromFile("shaders/texture_phong.frag", GL_FRAGMENT_SHADER);
 	shader->Link();
 	m_engine->Resources()->Add("phong_shader", std::move(shader));
-
-	shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
-	shader->m_name = "shader";
-	shader->m_engine = m_engine;
-	shader->CreateShaderFromFile("shaders/gouraud.vert", GL_VERTEX_SHADER);
-	shader->CreateShaderFromFile("shaders/gouraud.frag", GL_FRAGMENT_SHADER);
-	shader->Link();
-	m_engine->Resources()->Add("gouraud_shader", std::move(shader));
 
 	// material
 	auto material = m_engine->Factory()->Create<Material>(Material::GetClassName());
@@ -62,17 +47,6 @@ bool GameScene::Create(const Name& name)
 	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/sphere.obj");
 	model->m_mesh->m_material = m_engine->Resources()->Get<Material>("material");
 	model->m_shader = m_engine->Resources()->Get<Program>("phong_shader");
-	Add(std::move(model));
-
-	model = m_engine->Factory()->Create<Model>(Model::GetClassName());
-	model->m_name = "model";
-	model->m_engine = m_engine;
-	model->m_scene = this;
-	model->m_transform.translation = glm::vec3(2.0f, 0.0f, 0.0f);
-	model->m_transform.scale = glm::vec3(0.5f);
-	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/sphere.obj");
-	model->m_mesh->m_material = m_engine->Resources()->Get<Material>("material");
-	model->m_shader = m_engine->Resources()->Get<Program>("gouraud_shader");
 	Add(std::move(model));
 
 	// light
@@ -104,21 +78,6 @@ void GameScene::Update()
 {
 	Scene::Update();
 
-	//glm::vec3 camera_rotate(0.0f);
-	//camera_rotate.x = m_engine->Get<Input>()->GetAxisRelative("pitch") * 0.001f;
-	//camera_rotate.y = m_engine->Get<Input>()->GetAxisRelative("yaw") * 0.001f;
-
-	//glm::quat qpitch = glm::angleAxis(camera_rotate.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	//glm::quat qyaw = glm::angleAxis(camera_rotate.y, glm::vec3(0.0f, 1.0f, 0.0f));
-
-	//Camera* camera = GetObject<Camera>("camera");
-	//camera->GetTransform().rotation = qpitch * camera->GetTransform().rotation * qyaw;
-	//camera->GetTransform().rotation = glm::normalize(camera->GetTransform().rotation);
-	////glm::mat4 camera_matrix = camera.GetTransform().rotation
-	
-	Camera* camera = Get<Camera>("camera");
-	camera->Update();
-
 	Model* model = Get<Model>("model");
 	glm::quat r = glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
 	model->m_transform.qrotation = model->m_transform.qrotation * r;
@@ -126,12 +85,6 @@ void GameScene::Update()
 	// set shader uniforms
 	Light* light = Get<Light>("light");
 	light->SetShader(m_engine->Resources()->Get<Program>("phong_shader").get());
-	light->SetShader(m_engine->Resources()->Get<Program>("gouraud_shader").get());
-
-	//shader->SetUniform("steps", steps);
-	//shader->SetUniform("fog.min_distance", 40.0f);
-	//shader->SetUniform("fog.max_distance", 50.0f);
-	//shader->SetUniform("fog.color", glm::vec3(0.85f));
 
 	// gui
 	GUI::Update(m_engine->GetEvent());
