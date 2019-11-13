@@ -215,6 +215,7 @@
   <ItemGroup>
     <None Include="builds\content\shaders\basic.frag" />
     <None Include="builds\content\shaders\basic.vert" />
+    <None Include="builds\content\shaders\basic_color.vert" />
     <None Include="builds\content\shaders\basic_lit.frag" />
     <None Include="builds\content\shaders\basic_lit.vert" />
     <None Include="builds\content\shaders\gouraud.frag" />
@@ -225,6 +226,7 @@
     <None Include="builds\content\shaders\texture_phong.vert" />
     <None Include="builds\content\shaders\texture_phong_fog.frag" />
     <None Include="builds\content\shaders\texture_phong_specular.frag" />
+    <None Include="builds\content\shaders\texture_phong_vertex.vert" />
     <None Include="builds\content\shaders\texture_unlit.frag" />
     <None Include="builds\content\shaders\texture_unlit.vert" />
     <None Include="builds\content\shaders\toon.frag" />

@@ -7,6 +7,7 @@ public:
 	OBJECT_DECLARATION(Camera, Actor)
 	virtual ~Camera() {}
 	
+	virtual bool Create(const Name& name) override;
 	virtual void Update() override;
 	void SetProjection(float fov, float aspect_ratio, float near_clip, float far_clip);
 

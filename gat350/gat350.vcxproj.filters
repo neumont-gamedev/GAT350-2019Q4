@@ -308,5 +308,11 @@
     <None Include="builds\content\shaders\texture_phong_specular.frag">
       <Filter>shaders</Filter>
     </None>
+    <None Include="builds\content\shaders\basic_color.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\texture_phong_vertex.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

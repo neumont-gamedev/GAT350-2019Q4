@@ -2,6 +2,7 @@
 
 void Material::SetShader(class Program* shader)
 {
+	shader->Use();
 	shader->SetUniform("material.ambient", ambient);
 	shader->SetUniform("material.diffuse", diffuse);
 	shader->SetUniform("material.specular", specular);

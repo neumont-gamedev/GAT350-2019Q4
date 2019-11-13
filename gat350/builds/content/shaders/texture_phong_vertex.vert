@@ -8,9 +8,6 @@ out vec3 fposition;
 out vec3 fnormal;
 out vec2 ftexcoord;
 
-uniform vec2 uv_offset;
-uniform vec2 uv_scale;
-
 uniform mat4 mvp_matrix;
 uniform mat4 model_view_matrix;
 	
