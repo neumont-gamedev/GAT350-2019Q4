@@ -24,6 +24,14 @@ bool GameScene::Create(const Name& name)
 	shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
 	shader->m_name = "shader";
 	shader->m_engine = m_engine;
+	shader->CreateShaderFromFile("shaders/texture_phong_fx.vert", GL_VERTEX_SHADER);
+	shader->CreateShaderFromFile("shaders/texture_phong_fx.frag", GL_FRAGMENT_SHADER);
+	shader->Link();
+	m_engine->Resources()->Add("phong_shader_fx", std::move(shader));
+
+	shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
+	shader->m_name = "shader";
+	shader->m_engine = m_engine;
 	shader->CreateShaderFromFile("shaders/basic_color.vert", GL_VERTEX_SHADER);
 	shader->CreateShaderFromFile("shaders/basic.frag", GL_FRAGMENT_SHADER);
 	shader->Link();
@@ -39,7 +47,7 @@ bool GameScene::Create(const Name& name)
 	material->shininess = 128.0f;
 
 	// texture
-	auto texture = m_engine->Resources()->Get<Texture>("textures/grid.png");
+	auto texture = m_engine->Resources()->Get<Texture>("textures/lava.png");
 	material->textures.push_back(texture);
 	m_engine->Resources()->Add("material", std::move(material));
 	
@@ -60,10 +68,10 @@ bool GameScene::Create(const Name& name)
 	model->m_engine = m_engine;
 	model->m_scene = this;
 	model->m_transform.translation = glm::vec3(0);
-	model->m_transform.scale = glm::vec3(0.5f);
-	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/suzanne.obj");
+	model->m_transform.scale = glm::vec3(0.2f);
+	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/dragon.obj");
 	model->m_mesh->m_material = m_engine->Resources()->Get<Material>("material");
-	model->m_shader = m_engine->Resources()->Get<Program>("phong_shader");
+	model->m_shader = m_engine->Resources()->Get<Program>("phong_shader_fx");
 	Add(std::move(model));
 
 	model = m_engine->Factory()->Create<Model>(Model::GetClassName());
@@ -84,7 +92,7 @@ bool GameScene::Create(const Name& name)
 	light->m_scene = this;
 	light->Create("light");
 	light->m_transform.translation = glm::vec3(2);
-	light->ambient = glm::vec3(0.1f);
+	light->ambient = glm::vec3(0.8f);
 	light->diffuse = glm::vec3(1, 1, 1);
 	light->specular = glm::vec3(1.0f);
 	Add(std::move(light));
@@ -114,12 +122,36 @@ void GameScene::Update()
 	
 	// set shader uniforms
 	Light* light = Get<Light>("light");
-	light->m_transform.translation = light->m_transform.translation * glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
+	//light->m_transform.translation = light->m_transform.translation * glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
 	light->SetShader(m_engine->Resources()->Get<Program>("phong_shader").get());
+	light->SetShader(m_engine->Resources()->Get<Program>("phong_shader_fx").get());
+
+	m_time = m_time + g_timer.dt();
+
+	auto shader = m_engine->Resources()->Get<Program>("phong_shader_fx").get();
+	shader->SetUniform("scale", m_scale);
+	shader->SetUniform("time", m_time);
+	shader->SetUniform("amplitude", m_amplitude);
+	shader->SetUniform("frequency", m_frequency);
+	shader->SetUniform("rate", m_rate);
+
+	shader->SetUniform("uv_scale", m_uv_scale);
+	m_uv_offset.y = m_uv_offset.y + g_timer.dt();
+	shader->SetUniform("uv_offset", m_uv_offset);
+
 
 	// gui
 	GUI::Update(m_engine->GetEvent());
 	GUI::Begin(m_engine->Get<Renderer>());
+	ImGui::SliderFloat3("scale", glm::value_ptr(m_scale), -10, 10);
+
+	ImGui::SliderFloat2("uv_scale", glm::value_ptr(m_uv_scale), -10, 10);
+	ImGui::SliderFloat2("uv_offset", glm::value_ptr(m_uv_offset), -10, 10);
+
+	ImGui::SliderFloat("time", &m_time, 0.0f, 10.0f);
+	ImGui::SliderFloat("amplitude", &m_amplitude, 0.0f, 10.0f);
+	ImGui::SliderFloat("frequency", &m_frequency, 0.0f, 10.0f);
+	ImGui::SliderFloat("rate", &m_rate, 0.0f, 10.0f);
 	GUI::End();
 }
 

@@ -225,8 +225,9 @@
     <None Include="builds\content\shaders\texture_phong.frag" />
     <None Include="builds\content\shaders\texture_phong.vert" />
     <None Include="builds\content\shaders\texture_phong_fog.frag" />
+    <None Include="builds\content\shaders\texture_phong_fx.frag" />
+    <None Include="builds\content\shaders\texture_phong_fx.vert" />
     <None Include="builds\content\shaders\texture_phong_specular.frag" />
-    <None Include="builds\content\shaders\texture_phong_vertex.vert" />
     <None Include="builds\content\shaders\texture_unlit.frag" />
     <None Include="builds\content\shaders\texture_unlit.vert" />
     <None Include="builds\content\shaders\toon.frag" />
