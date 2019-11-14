@@ -24,7 +24,7 @@ void Camera::Update()
 	glm::quat pitch = glm::angleAxis(rotation.y, glm::vec3(1, 0, 0));
 	glm::quat yaw = glm::angleAxis(rotation.x, glm::vec3(0, 1, 0));
 
-	m_transform.rotation = pitch * m_transform.rotation * yaw;
+	//m_transform.rotation = pitch * m_transform.rotation * yaw;
 
 	glm::vec3 target = m_transform.translation + m_transform.rotation * glm::vec3(0.0f, 0.0f, 1.0f);
 	m_view_matrix = glm::lookAt(m_transform.translation, target, glm::vec3(0.0f, 1.0f, 0.0f));

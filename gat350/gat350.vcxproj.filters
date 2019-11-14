@@ -311,7 +311,10 @@
     <None Include="builds\content\shaders\basic_color.vert">
       <Filter>shaders</Filter>
     </None>
-    <None Include="builds\content\shaders\texture_phong_vertex.vert">
+    <None Include="builds\content\shaders\texture_phong_fx.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\texture_phong_fx.frag">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>
