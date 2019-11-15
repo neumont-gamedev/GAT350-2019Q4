@@ -31,7 +31,7 @@ void main()
 	fnormal = normalize(transpose(inverse(mat3(model_view_matrix))) * vnormal);
 	fposition = vec3(model_view_matrix * vec4(position, 1.0));
 	ftexcoord = (vtexcoord + uv_offset) * uv_scale;
-	ftexcoord = position.xy * uv_scale;
+	ftexcoord = fposition.xy * uv_scale;
 
 	gl_Position = mvp_matrix * vec4(position, 1.0);
 }
