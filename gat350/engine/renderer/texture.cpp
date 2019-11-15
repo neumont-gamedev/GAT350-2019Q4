@@ -36,6 +36,8 @@ void Texture::CreateTexture(const std::string& filename, GLenum type, GLuint uni
 
 	glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 #ifdef STB_IMAGE_IMPLEMENTATION
 	stbi_image_free(data);
@@ -53,7 +55,7 @@ void Texture::Bind()
 #ifdef STB_IMAGE_IMPLEMENTATION
 u8* Texture::LoadImage(const std::string& filename, int& width, int& height, int& channels)
 {
-	stbi_set_flip_vertically_on_load(false);
+	stbi_set_flip_vertically_on_load(true);
 	u8* image = stbi_load(filename.c_str(), &width, &height, &channels, 0);
 
 	return image;
