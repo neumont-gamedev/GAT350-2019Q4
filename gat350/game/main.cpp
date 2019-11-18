@@ -1,5 +1,6 @@
 #include "game_scene.h"
 #include "../engine/engine.h"
+#include "../engine/editor/editor.h"
 
 int main(int argc, char** argv)
 {
@@ -8,6 +9,8 @@ int main(int argc, char** argv)
 
 	std::unique_ptr<Scene> scene = std::make_unique<GameScene>(GameScene::GetClassName(), engine.get());
 	scene->Create("scene");
+
+	engine->Get<Editor>()->m_scene = scene.get();
 
 	while (!engine->IsQuit())
 	{

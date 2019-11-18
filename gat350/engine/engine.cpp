@@ -1,5 +1,6 @@
 #include "engine.h"
 #include "input/input.h"
+#include "editor/editor.h"
 #include "renderer/renderer.h"
 #include "renderer/program.h"
 #include "renderer/vertex_index_array.h"
@@ -14,6 +15,7 @@
 bool Engine::Initialize()
 {
 	// core
+	srand((unsigned int)time(NULL));
 	filesystem::set_current_path("content");
 	Name::AllocNames();
 
@@ -33,6 +35,10 @@ bool Engine::Initialize()
 	renderer->Initialize(1280, 720);
 	m_systems.push_back(std::move(renderer));
 
+	std::unique_ptr<Editor> editor = std::make_unique<Editor>(Editor::GetClassName(), this);
+	editor->Initialize();
+	m_systems.push_back(std::move(editor));
+	
 	GUI::Initialize(Get<Renderer>());
 
 	// factory
