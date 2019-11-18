@@ -7,6 +7,17 @@ bool Mesh::Create(const Name& name)
 	std::vector<glm::vec2> texcoords;
 
 	Mesh::Load(name.c_str(), positions, normals, texcoords);
+
+	if (normals.empty())
+	{
+		for (size_t i = 0; i < positions.size(); i += 3)
+		{
+			glm::vec3 normal = math::calculate_normal(positions[i + 0], positions[i + 1], positions[i + 2]);
+			normals.push_back(normal);
+			normals.push_back(normal);
+			normals.push_back(normal);
+		}
+	}
 		
 	if (!positions.empty())
 	{
@@ -136,4 +147,6 @@ bool Mesh::Load(const std::string& filename, std::vector<glm::vec3>& positions, 
 
 	return true;
 }
+
+
 

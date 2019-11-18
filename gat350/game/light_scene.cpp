@@ -1,4 +1,4 @@
-#include "light_scene.h"
+#include "game_scene.h"
 #include "../engine/engine.h"
 #include "../engine/editor/editor.h"
 #include "../engine/renderer/renderer.h"
@@ -11,14 +11,16 @@
 #include "../engine/renderer/camera.h"
 #include "../engine/renderer/gui.h"
 
-bool LightScene::Create(const Name& name)
+#define MAX_LIGHTS 5
+
+bool GameScene::Create(const Name& name)
 {
 	// shader
 	auto shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
 	shader->m_name = "shader";
 	shader->m_engine = m_engine;
 	shader->CreateShaderFromFile("shaders/texture_phong.vert", GL_VERTEX_SHADER);
-	shader->CreateShaderFromFile("shaders/texture_phong_light.frag", GL_FRAGMENT_SHADER);
+	shader->CreateShaderFromFile("shaders/texture_phong_lights.frag", GL_FRAGMENT_SHADER);
 	shader->Link();
 	m_engine->Resources()->Add("phong_shader", std::move(shader));
 
@@ -48,7 +50,7 @@ bool LightScene::Create(const Name& name)
 	material->shininess = 128.0f;
 
 	// texture
-	auto texture = m_engine->Resources()->Get<Texture>("textures/uvgrid.jpg");
+	auto texture = m_engine->Resources()->Get<Texture>("textures/grid.png");
 	material->textures.push_back(texture);
 	m_engine->Resources()->Add("material", std::move(material));
 	
@@ -87,19 +89,25 @@ bool LightScene::Create(const Name& name)
 	Add(std::move(model));
 
 	// light
-	auto light = m_engine->Factory()->Create<Light>(Light::GetClassName());
-	light->m_name = "light";
-	light->m_engine = m_engine;
-	light->m_scene = this;
-	light->Create("light");
-	light->m_transform.translation = glm::vec3(0, 2, 1);
-	light->m_transform.rotation = glm::angleAxis(glm::radians(90.0f), glm::vec3(1, 0, 0));
-	light->ambient = glm::vec3(0.3f);
-	light->diffuse = glm::vec3(1, 1, 1);
-	light->specular = glm::vec3(1.0f);
-	light->cutoff = 30.0f;
-	light->exponent = 64.0f;
-	Add(std::move(light));
+	 
+	{
+		for (size_t i = 0; i < MAX_LIGHTS; i++)
+		{
+			auto light = m_engine->Factory()->Create<Light>(Light::GetClassName());
+			light->m_name = "light";
+			light->m_engine = m_engine;
+			light->m_scene = this;
+			light->Create("light");
+			light->m_transform.translation = glm::sphericalRand(5.0f);
+			light->m_transform.rotation = glm::angleAxis(glm::radians(90.0f), glm::vec3(1, 0, 0));
+			light->ambient = glm::vec3(0.0f);
+			light->diffuse = glm::rgbColor(glm::vec3(g_random(360.0f), 1.0f, 1.0f));
+			light->specular = glm::vec3(1.0f);
+			light->cutoff = 30.0f;
+			light->exponent = 64.0f;
+			Add(std::move(light));
+		}
+	}
 
 	// camera
 	auto camera = m_engine->Factory()->Create<Camera>(Camera::GetClassName());
@@ -116,43 +124,33 @@ bool LightScene::Create(const Name& name)
 	return true;
 }
 
-void LightScene::Update()
+void GameScene::Update()
 {
 	Scene::Update();
-
-	//Model* model = Get<Model>("model2");
-	//glm::quat r = glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
-	//model->m_transform.rotation = model->m_transform.rotation * r;
 	
 	// set shader uniforms
-	Light* light = Get<Light>("light");
-	light->m_transform.translation = light->m_transform.translation * glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
-	
-	light->SetShader(m_engine->Resources()->Get<Program>("phong_shader").get());
-	//light->SetShader(m_engine->Resources()->Get<Program>("phong_shader_fx").get());
+	auto shader = m_engine->Resources()->Get<Program>("phong_shader");
 
-	//m_time = m_time + g_timer.dt();
+	auto lights = Get<Light>();
+	size_t index = 0;
+	for (Light* light : lights)
+	{
+		light->m_transform.translation = light->m_transform.translation * glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
 
-	//auto shader = m_engine->Resources()->Get<Program>("phong_shader_fx").get();
-	//shader->SetUniform("scale", m_scale);
-	//shader->SetUniform("time", m_time);
-	//shader->SetUniform("amplitude", m_amplitude);
-	//shader->SetUniform("frequency", m_frequency);
-	//shader->SetUniform("rate", m_rate);
-
-	//shader->SetUniform("uv_scale", m_uv_scale);
-	//m_uv_offset.y = m_uv_offset.y + g_timer.dt();
-	//shader->SetUniform("uv_offset", m_uv_offset);
-
+		std::string lightname = "lights[" + std::to_string(index++) + "]";
+		light->SetShader(lightname, shader.get());
+	}
 
 	// gui
 	GUI::Update(m_engine->GetEvent());
 	GUI::Begin(m_engine->Get<Renderer>());
+
 	m_engine->Get<Editor>()->UpdateGUI();
+
 	GUI::End();
 }
 
-void LightScene::Draw()
+void GameScene::Draw()
 {
 	m_engine->Get<Renderer>()->ClearBuffer();
 

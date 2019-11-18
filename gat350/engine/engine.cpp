@@ -15,6 +15,7 @@
 bool Engine::Initialize()
 {
 	// core
+	srand((unsigned int)time(NULL));
 	filesystem::set_current_path("content");
 	Name::AllocNames();
 
@@ -37,7 +38,7 @@ bool Engine::Initialize()
 	std::unique_ptr<Editor> editor = std::make_unique<Editor>(Editor::GetClassName(), this);
 	editor->Initialize();
 	m_systems.push_back(std::move(editor));
-
+	
 	GUI::Initialize(Get<Renderer>());
 
 	// factory
