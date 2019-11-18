@@ -1,10 +1,10 @@
 #pragma once
 #include "../engine/framework/scene.h"
 
-class GameScene : public Scene
+class LightScene : public Scene
 {
 public:
-	OBJECT_DECLARATION(GameScene, Scene)
+	OBJECT_DECLARATION(LightScene, Scene)
 
 	bool Create(const Name& name) override;
 	void Update() override;
