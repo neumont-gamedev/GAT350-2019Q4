@@ -11,6 +11,7 @@ public:
 
 	void Update() override;
 	void Draw(GLenum primitiveType = GL_TRIANGLES) override;
+	void Edit() override;
 
 public:
 	std::shared_ptr<Mesh> m_mesh;

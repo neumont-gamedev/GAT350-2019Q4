@@ -1,4 +1,4 @@
-#include "light_scene.h"
+#include "normal_map_scene.h"
 #include "../engine/engine.h"
 #include "../engine/editor/editor.h"
 #include "../engine/renderer/renderer.h"
@@ -11,16 +11,14 @@
 #include "../engine/renderer/camera.h"
 #include "../engine/renderer/gui.h"
 
-#define MAX_LIGHTS 5
-
-bool LightScene::Create(const Name& name)
+bool NormalMapScene::Create(const Name& name)
 {
 	// shader
 	auto shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
 	shader->m_name = "shader";
 	shader->m_engine = m_engine;
 	shader->CreateShaderFromFile("shaders/texture_phong.vert", GL_VERTEX_SHADER);
-	shader->CreateShaderFromFile("shaders/texture_phong_lights.frag", GL_FRAGMENT_SHADER);
+	shader->CreateShaderFromFile("shaders/texture_phong_normal.frag", GL_FRAGMENT_SHADER);
 	shader->Link();
 	m_engine->Resources()->Add("phong_shader", std::move(shader));
 
@@ -47,10 +45,13 @@ bool LightScene::Create(const Name& name)
 	material->ambient = glm::vec3(1.0f);
 	material->diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
 	material->specular = glm::vec3(1.0f);
-	material->shininess = 128.0f;
+	material->shininess = 4.0f;
 
 	// texture
-	auto texture = m_engine->Resources()->Get<Texture>("textures/grid.png");
+	auto texture = m_engine->Resources()->Get<Texture>("textures/rocks.jpg");
+	material->textures.push_back(texture);
+	texture = m_engine->Resources()->Get<Texture>("textures/rocks_normal.jpg");
+	texture->m_unit = GL_TEXTURE1;
 	material->textures.push_back(texture);
 	m_engine->Resources()->Add("material", std::move(material));
 	
@@ -72,7 +73,7 @@ bool LightScene::Create(const Name& name)
 	model->m_scene = this;
 	model->m_transform.translation = glm::vec3(0);
 	model->m_transform.scale = glm::vec3(1);
-	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/suzanne.obj");
+	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/quad.obj");
 	model->m_mesh->m_material = m_engine->Resources()->Get<Material>("material");
 	model->m_shader = m_engine->Resources()->Get<Program>("phong_shader");
 	Add(std::move(model));
@@ -89,26 +90,20 @@ bool LightScene::Create(const Name& name)
 	Add(std::move(model));
 
 	// light
-	 
-	{
-		for (size_t i = 0; i < MAX_LIGHTS; i++)
-		{
-			auto light = m_engine->Factory()->Create<Light>(Light::GetClassName());
-			light->m_name = "light";
-			light->m_engine = m_engine;
-			light->m_scene = this;
-			light->Create("light");
-			light->m_transform.translation = glm::sphericalRand(5.0f);
-			light->m_transform.rotation = glm::angleAxis(glm::radians(90.0f), glm::vec3(1, 0, 0));
-			light->ambient = glm::vec3(0.0f);
-			light->diffuse = glm::rgbColor(glm::vec3(g_random(360.0f), 1.0f, 1.0f));
-			light->specular = glm::vec3(1.0f);
-			light->cutoff = 30.0f;
-			light->exponent = 64.0f;
-			Add(std::move(light));
-		}
-	}
-
+	auto light = m_engine->Factory()->Create<Light>(Light::GetClassName());
+	light->m_name = "light";
+	light->m_engine = m_engine;
+	light->m_scene = this;
+	light->Create("light");
+	light->m_transform.translation = glm::vec3(0, 2, 2);
+	light->m_transform.rotation = glm::angleAxis(glm::radians(90.0f), glm::vec3(1, 0, 0));
+	light->ambient = glm::vec3(0);
+	light->diffuse = glm::vec3(1);
+	light->specular = glm::vec3(1);
+	light->cutoff = 30.0f;
+	light->exponent = 64.0f;
+	Add(std::move(light));
+	
 	// camera
 	auto camera = m_engine->Factory()->Create<Camera>(Camera::GetClassName());
 	camera->m_name = "camera";
@@ -124,25 +119,16 @@ bool LightScene::Create(const Name& name)
 	return true;
 }
 
-void LightScene::Update()
+void NormalMapScene::Update()
 {
 	Scene::Update();
 	
 	// set shader uniforms
 	auto shader = m_engine->Resources()->Get<Program>("phong_shader");
 
-	auto lights = Get<Light>();
-	int index = 0;
-	for (Light* light : lights)
-	{
-		if (!light->m_active) continue;
-
-		light->m_transform.translation = light->m_transform.translation * glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
-
-		std::string lightname = "lights[" + std::to_string(index++) + "]";
-		light->SetShader(lightname, shader.get());
-	}
-	shader->SetUniform("num_lights", index);
+	auto light = Get<Light>("light");
+	light->m_transform.translation = light->m_transform.translation * glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 0, 1));
+	light->SetShader(shader.get());
 
 	// gui
 	GUI::Update(m_engine->GetEvent());
@@ -153,7 +139,7 @@ void LightScene::Update()
 	GUI::End();
 }
 
-void LightScene::Draw()
+void NormalMapScene::Draw()
 {
 	m_engine->Get<Renderer>()->ClearBuffer();
 

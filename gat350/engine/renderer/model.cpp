@@ -20,3 +20,11 @@ void Model::Draw(GLenum primitiveType)
 	m_mesh->SetShader(m_shader.get());
 	m_mesh->Draw();
 }
+
+void Model::Edit()
+{
+	Actor::Edit();
+
+	ImGui::Separator();
+	ImGui::Text("Mesh: %s", m_mesh->m_name.c_str());
+}

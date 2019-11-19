@@ -3,7 +3,6 @@
 #define POINT		0
 #define DIRECTION	1
 #define SPOTLIGHT	2
-#define MAX_LIGHTS	5
 	
 in vec3 fposition;
 in vec3 fnormal;
@@ -33,10 +32,10 @@ struct light_s
 	float exponent;
 };
 
-uniform light_s lights[MAX_LIGHTS];
-uniform int num_lights = MAX_LIGHTS;
+uniform light_s light;
 
 layout (binding = 0) uniform sampler2D texture_sample;
+layout (binding = 1) uniform sampler2D normal_sample;
 
 void phong(light_s in_light, vec3 position, vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 specular)
 {
@@ -83,17 +82,10 @@ void main()
 	vec3 diffuse;
 	vec3 specular;
 
-	for (int i = 0; i < num_lights; i++)
-	{
-		vec3 a;
-		vec3 d;
-		vec3 s;
+	vec3 normal = texture(normal_sample, ftexcoord).rgb;
+	normal = (normal * 2.0) - 1.0;
+	phong(light, fposition, normal, ambient, diffuse, specular);
 
-		phong(lights[i], fposition, fnormal, a, d, s);
-		ambient = ambient + a;
-		diffuse = diffuse + d;
-		specular = specular + s;
-	}
-
+	//color = vec4(normal, 1.0);
 	color = (vec4(ambient + diffuse, 1.0f) * texture(texture_sample, ftexcoord)) + vec4(specular, 1.0f);
 }
