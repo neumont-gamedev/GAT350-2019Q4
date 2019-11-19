@@ -6,6 +6,15 @@
 class Material : public Resource
 {
 public:
+	enum eBlend
+	{
+		OPAQUE,
+		CUTOUT,
+		TRANSPARENT,
+		ADDITIVE
+	};
+
+public:
 	OBJECT_DECLARATION(Material, Resource)
 	virtual ~Material() {}
 	
@@ -20,5 +29,6 @@ public:
 	glm::vec3 specular = glm::vec3(1.0f);
 	float shininess = 100.0f;
 
+	eBlend blend = eBlend::OPAQUE;
 	std::vector<std::shared_ptr<Texture>> textures;
 };

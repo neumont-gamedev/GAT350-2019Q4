@@ -25,11 +25,15 @@ struct light_s
 };
 
 uniform light_s light;
+uniform float discard_threshold;
 
 layout (binding = 0) uniform sampler2D texture_sample;
 
 void main()
 {
+	vec4 texture_color = texture(texture_sample, ftexcoord);
+	if (texture_color.a < discard_threshold) discard;
+
 	vec3 position_to_light = normalize(vec3(light.position) - fposition);
 
 	// ambient
@@ -50,5 +54,5 @@ void main()
 		specular = light.specular * material.specular * specular_intensity;
 	}
 
-	color = (vec4(ambient + diffuse, 1.0f) * texture(texture_sample, ftexcoord)) + vec4(specular, 1.0f);
+	color = (vec4(ambient + diffuse, 1.0f) * texture(texture_sample, ftexcoord)) + vec4(specular, texture_color.a);
 }

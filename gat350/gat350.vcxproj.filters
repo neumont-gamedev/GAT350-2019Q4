@@ -148,6 +148,12 @@
     <ClCompile Include="game\normal_map_scene.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
+    <ClCompile Include="game\lights_scene.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\fx_scene.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\assert.h">
@@ -277,6 +283,12 @@
       <Filter>source\engine\editor</Filter>
     </ClInclude>
     <ClInclude Include="game\normal_map_scene.h">
+      <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\lights_scene.h">
+      <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\fx_scene.h">
       <Filter>source\game</Filter>
     </ClInclude>
   </ItemGroup>

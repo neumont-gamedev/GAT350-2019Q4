@@ -11,6 +11,10 @@ void Material::SetShader(class Program* shader)
 
 void Material::Use()
 {
+	(blend == TRANSPARENT || blend == ADDITIVE) ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
+	if (blend == TRANSPARENT) glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	else if (blend == ADDITIVE) glBlendFunc(GL_ONE, GL_ONE);
+
 	for (const auto& texture : textures)
 	{
 		texture->Bind();
