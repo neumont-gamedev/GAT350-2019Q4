@@ -10,6 +10,7 @@ public:
 		NORMAL,
 		COLOR,
 		TEXCOORD,
+		TANGENT,
 		MULTI
 	};
 
