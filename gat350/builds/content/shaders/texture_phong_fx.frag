@@ -25,14 +25,17 @@ struct light_s
 };
 
 uniform light_s light;
-uniform float discard_threshold;
+uniform vec3 discard_color;
+uniform float dissolve;
 
 layout (binding = 0) uniform sampler2D texture_sample;
+layout (binding = 1) uniform sampler2D noise_sample;
 
 void main()
 {
 	vec4 texture_color = texture(texture_sample, ftexcoord);
-	if (texture_color.a < discard_threshold) discard;
+	//if (discard_color == texture_color.rgb) discard;
+	//if (texture(noise_sample, ftexcoord).r <= dissolve) discard;
 
 	vec3 position_to_light = normalize(vec3(light.position) - fposition);
 

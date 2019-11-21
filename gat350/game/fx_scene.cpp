@@ -47,27 +47,31 @@ bool FXScene::Create(const Name& name)
 		material->diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
 		material->specular = glm::vec3(1.0f);
 		material->shininess = 128.0f;
-		material->blend = Material::TRANSPARENT;
-
-		// texture
-		auto texture = m_engine->Resources()->Get<Texture>("textures/spark.tga");
-		material->textures.push_back(texture);
-		m_engine->Resources()->Add("alpha_material", std::move(material));
-	}
-	
-	{
-		auto material = m_engine->Factory()->Create<Material>(Material::GetClassName());
-		material->m_name = "material";
-		material->m_engine = m_engine;
-		material->ambient = glm::vec3(1.0f);
-		material->diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
-		material->specular = glm::vec3(1.0f);
-		material->shininess = 128.0f;
 
 		// texture
 		auto texture = m_engine->Resources()->Get<Texture>("textures/uvgrid.jpg");
 		material->textures.push_back(texture);
 		m_engine->Resources()->Add("material", std::move(material));
+	}
+
+	{
+		auto material = m_engine->Factory()->Create<Material>(Material::GetClassName());
+		material->m_name = "material";
+		material->m_engine = m_engine;
+		material->ambient = glm::vec3(1);
+		material->diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
+		material->specular = glm::vec3(1);
+		material->shininess = 128.0f;
+		material->blend = Material::TRANSPARENT;
+
+		// texture
+		auto texture = m_engine->Resources()->Get<Texture>("textures/burst.tga");
+		material->textures.push_back(texture);
+		texture = m_engine->Resources()->Get<Texture>("textures/noise.png");
+		texture->m_unit = GL_TEXTURE1;
+		material->textures.push_back(texture);
+
+		m_engine->Resources()->Add("fx_material", std::move(material));
 	}
 
 	{
@@ -82,8 +86,7 @@ bool FXScene::Create(const Name& name)
 	}
 
 	// scene actors
-
-	// model
+		// model
 	{
 		auto model = m_engine->Factory()->Create<Model>(Model::GetClassName());
 		model->m_name = "model2";
@@ -106,7 +109,7 @@ bool FXScene::Create(const Name& name)
 		model->m_transform.translation = glm::vec3(0);
 		model->m_transform.scale = glm::vec3(1);
 		model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/quad.obj");
-		model->m_mesh->m_material = m_engine->Resources()->Get<Material>("alpha_material");
+		model->m_mesh->m_material = m_engine->Resources()->Get<Material>("fx_material");
 		model->m_shader = m_engine->Resources()->Get<Program>("phong_shader_fx");
 		Add(std::move(model));
 	}
@@ -117,10 +120,10 @@ bool FXScene::Create(const Name& name)
 	light->m_engine = m_engine;
 	light->m_scene = this;
 	light->Create("light");
-	light->m_transform.translation = glm::sphericalRand(5.0f);
+	light->m_transform.translation = glm::vec3(0, 2, 2);// glm::sphericalRand(5.0f);
 	light->m_transform.rotation = glm::angleAxis(glm::radians(90.0f), glm::vec3(1, 0, 0));
-	light->ambient = glm::vec3(1.0f);
-	light->diffuse = glm::rgbColor(glm::vec3(g_random(360.0f), 1.0f, 1.0f));
+	light->ambient = glm::vec3(1);
+	light->diffuse = glm::vec3(1);// glm::rgbColor(glm::vec3(g_random(360.0f), 1.0f, 1.0f));
 	light->specular = glm::vec3(1.0f);
 	light->cutoff = 30.0f;
 	light->exponent = 64.0f;
@@ -146,7 +149,7 @@ void FXScene::Update()
 	Scene::Update();
 
 	auto light = Get<Light>("light");
-	light->m_transform.translation = light->m_transform.translation * glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 0, 1));
+	light->m_transform.translation = light->m_transform.translation * glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
 
 	// set shader uniforms
 	auto shader = m_engine->Resources()->Get<Program>("phong_shader");
@@ -154,13 +157,15 @@ void FXScene::Update()
 
 	shader = m_engine->Resources()->Get<Program>("phong_shader_fx");
 	light->SetShader(shader.get());
-	shader->SetUniform("discard_threshold", m_discard_threshold);
+	shader->SetUniform("discard_color", m_discard_color);
+	shader->SetUniform("dissolve", m_dissolve);
 
 	// gui
 	GUI::Update(m_engine->GetEvent());
 	GUI::Begin(m_engine->Get<Renderer>());
 
-	ImGui::SliderFloat("discard", &m_discard_threshold, 0.0f, 1.0f);
+	ImGui::ColorEdit3("Discard", glm::value_ptr(m_discard_color));
+	ImGui::SliderFloat("Dissolve", &m_dissolve, 0.0f, 1.0f);
 	m_engine->Get<Editor>()->UpdateGUI();
 
 	GUI::End();

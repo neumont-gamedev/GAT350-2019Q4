@@ -1,10 +1,10 @@
 #pragma once
 #include "../engine/framework/scene.h"
 
-class FXScene : public Scene
+class BumpScene : public Scene
 {
 public:
-	OBJECT_DECLARATION(FXScene, Scene)
+	OBJECT_DECLARATION(BumpScene, Scene)
 
 	bool Create(const Name& name) override;
 	void Update() override;
@@ -20,7 +20,4 @@ public:
 
 	glm::vec2 m_uv_scale = glm::vec2(1);
 	glm::vec2 m_uv_offset = glm::vec2(0);
-
-	float m_dissolve = 0.0f;
-	glm::vec3 m_discard_color = glm::vec3(0);
 };
