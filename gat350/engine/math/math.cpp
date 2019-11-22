@@ -44,21 +44,24 @@ namespace math
 		return (normalize(normal));
 	}
 
-	glm::vec3 calculate_tangent(const glm::vec3 &v0, const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec2 & uv0, const glm::vec2 & uv1, const glm::vec2 & uv2, const glm::vec3 & normal)
+	glm::vec3 calculate_tangent(const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2, const glm::vec2& uv0, const glm::vec2& uv1, const glm::vec2& uv2)
 	{
+		const int u = 0;
+		const int v = 1;
+
 		glm::vec3 edge1 = v1 - v0;
 		glm::vec3 edge2 = v2 - v0;
 
-		float u1_ = uv1[0] - uv0[0];
-		float v1_ = uv1[1] - uv0[1];
-		float u2_ = uv2[0] - uv0[0];
-		float v2_ = uv2[1] - uv0[1];
+		glm::vec2 edge1_uv = uv1 - uv0;
+		glm::vec2 edge2_uv = uv2 - uv0;
 
-		float r = 1.0f / (u1_ * v2_ - v1_ * u2_);
-		glm::vec3 tangent = (edge1 * v2_ - edge2 * v1_) * r;
+		float f = 1.0f / ((edge1_uv[u] * edge2_uv[v]) - (edge1_uv[v] * edge2_uv[u]));
 
-		// Gram-Schmidt orthogonalize
-		tangent = glm::normalize(tangent - (normal * glm::dot(normal, tangent)));
+		glm::vec3 tangent;
+		tangent.x = f * (edge2_uv[v] * edge1.x - edge1_uv[v] * edge2.x);
+		tangent.y = f * (edge2_uv[v] * edge1.y - edge1_uv[v] * edge2.y);
+		tangent.z = f * (edge2_uv[v] * edge1.z - edge1_uv[v] * edge2.z);
+		tangent = glm::normalize(tangent);
 
 		return tangent;
 	}

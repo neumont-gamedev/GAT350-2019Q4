@@ -7,6 +7,7 @@ bool Mesh::Create(const Name& name)
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> texcoords;
+	std::vector<glm::vec3> tangents;
 
 	Mesh::Load(name.c_str(), positions, normals, texcoords);
 
@@ -20,7 +21,24 @@ bool Mesh::Create(const Name& name)
 			normals.push_back(normal);
 		}
 	}
-		
+	
+	if (tangents.empty())
+	{
+		for (size_t i = 0; i < positions.size() - 2; i += 3)
+		{
+			glm::vec3 tangent = math::calculate_tangent(positions[i + 0], positions[i + 1], positions[i + 2], texcoords[i + 0], texcoords[i + 1], texcoords[i + 2]);
+			tangents.push_back(tangent);
+			tangents.push_back(tangent);
+			tangents.push_back(tangent);
+		}
+
+		// Gram-Schmidt orthogonalize
+		for (size_t i = 0; i < tangents.size(); i++)
+		{
+			tangents[i] = glm::normalize(tangents[i] - (normals[i] * glm::dot(normals[i], tangents[i])));
+		}
+	}
+
 	if (!positions.empty())
 	{
 		m_vertex_array.CreateBuffer(VertexArray::POSITION, static_cast<GLsizei>(positions.size() * sizeof(glm::vec3)), static_cast<GLsizei>(positions.size()), (void*)&positions[0]);
@@ -35,6 +53,11 @@ bool Mesh::Create(const Name& name)
 	{
 		m_vertex_array.CreateBuffer(VertexArray::TEXCOORD, static_cast<GLsizei>(texcoords.size() * sizeof(glm::vec2)), static_cast<GLsizei>(texcoords.size()), (void*)&texcoords[0]);
 		m_vertex_array.SetAttribute(VertexArray::TEXCOORD, 2, 0, 0);
+	}
+	if (!tangents.empty())
+	{
+		m_vertex_array.CreateBuffer(VertexArray::TANGENT, static_cast<GLsizei>(tangents.size() * sizeof(glm::vec3)), static_cast<GLsizei>(tangents.size()), (void*)&tangents[0]);
+		m_vertex_array.SetAttribute(VertexArray::TANGENT, 3, 0, 0);
 	}
 
 	return true;
