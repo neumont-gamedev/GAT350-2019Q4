@@ -17,7 +17,7 @@ bool NormalMapScene::Create(const Name& name)
 	auto shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
 	shader->m_name = "shader";
 	shader->m_engine = m_engine;
-	shader->CreateShaderFromFile("shaders/texture_phong.vert", GL_VERTEX_SHADER);
+	shader->CreateShaderFromFile("shaders/texture_phong_normal.vert", GL_VERTEX_SHADER);
 	shader->CreateShaderFromFile("shaders/texture_phong_normal.frag", GL_FRAGMENT_SHADER);
 	shader->Link();
 	m_engine->Resources()->Add("phong_shader", std::move(shader));
@@ -48,9 +48,9 @@ bool NormalMapScene::Create(const Name& name)
 	material->shininess = 4.0f;
 
 	// texture
-	auto texture = m_engine->Resources()->Get<Texture>("textures/rocks.jpg");
+	auto texture = m_engine->Resources()->Get<Texture>("textures/ogre_diffuse.bmp");
 	material->textures.push_back(texture);
-	texture = m_engine->Resources()->Get<Texture>("textures/rocks_normal.jpg");
+	texture = m_engine->Resources()->Get<Texture>("textures/ogre_normal.bmp");
 	texture->m_unit = GL_TEXTURE1;
 	material->textures.push_back(texture);
 	m_engine->Resources()->Add("material", std::move(material));
@@ -73,21 +73,21 @@ bool NormalMapScene::Create(const Name& name)
 	model->m_scene = this;
 	model->m_transform.translation = glm::vec3(0);
 	model->m_transform.scale = glm::vec3(1);
-	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/quad.obj");
+	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/ogre.obj");
 	model->m_mesh->m_material = m_engine->Resources()->Get<Material>("material");
 	model->m_shader = m_engine->Resources()->Get<Program>("phong_shader");
 	Add(std::move(model));
 
-	model = m_engine->Factory()->Create<Model>(Model::GetClassName());
-	model->m_name = "model2";
-	model->m_engine = m_engine;
-	model->m_scene = this;
-	model->m_transform.translation = glm::vec3(0, -2, 0);
-	model->m_transform.scale = glm::vec3(20);
-	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/plane.obj");
-	model->m_mesh->m_material = m_engine->Resources()->Get<Material>("material");
-	model->m_shader = m_engine->Resources()->Get<Program>("phong_shader");
-	Add(std::move(model));
+	//model = m_engine->Factory()->Create<Model>(Model::GetClassName());
+	//model->m_name = "model2";
+	//model->m_engine = m_engine;
+	//model->m_scene = this;
+	//model->m_transform.translation = glm::vec3(0, -2, 0);
+	//model->m_transform.scale = glm::vec3(20);
+	//model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/plane.obj");
+	//model->m_mesh->m_material = m_engine->Resources()->Get<Material>("material");
+	//model->m_shader = m_engine->Resources()->Get<Program>("phong_shader");
+	//Add(std::move(model));
 
 	// light
 	auto light = m_engine->Factory()->Create<Light>(Light::GetClassName());

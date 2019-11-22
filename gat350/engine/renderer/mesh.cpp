@@ -13,7 +13,7 @@ bool Mesh::Create(const Name& name)
 
 	if (normals.empty())
 	{
-		for (size_t i = 0; i < positions.size(); i += 3)
+		for (size_t i = 0; i < positions.size() - 2; i += 3)
 		{
 			glm::vec3 normal = math::calculate_normal(positions[i + 0], positions[i + 1], positions[i + 2]);
 			normals.push_back(normal);
@@ -24,12 +24,18 @@ bool Mesh::Create(const Name& name)
 
 	if (tangents.empty())
 	{
-		for (size_t i = 0; i < positions.size(); i += 3)
+		for (size_t i = 0; i < positions.size() - 2; i += 3)
 		{
-			glm::vec3 tangent = math::calculate_tangent(positions[i + 0], positions[i + 1], positions[i + 2], texcoords[i + 0], texcoords[i + 1], texcoords[i + 2], normals[i]);
+			glm::vec3 tangent = math::calculate_tangent(positions[i + 0], positions[i + 1], positions[i + 2], texcoords[i + 0], texcoords[i + 1], texcoords[i + 2]);
 			tangents.push_back(tangent);
 			tangents.push_back(tangent);
 			tangents.push_back(tangent);
+		}
+
+		// Gram-Schmidt orthogonalize
+		for (size_t i = 0; i < tangents.size(); i++)
+		{
+			tangents[i] = glm::normalize(tangents[i] - (normals[i] * glm::dot(normals[i], tangents[i])));
 		}
 	}
 		
@@ -51,7 +57,7 @@ bool Mesh::Create(const Name& name)
 	if (!tangents.empty())
 	{
 		m_vertex_array.CreateBuffer(VertexArray::TANGENT, static_cast<GLsizei>(tangents.size() * sizeof(glm::vec3)), static_cast<GLsizei>(tangents.size()), (void*)&tangents[0]);
-		m_vertex_array.SetAttribute(VertexArray::TANGENT, 4, 0, 0);
+		m_vertex_array.SetAttribute(VertexArray::TANGENT, 3, 0, 0);
 	}
 
 	return true;
