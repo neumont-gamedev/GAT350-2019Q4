@@ -26,7 +26,7 @@ void Texture::CreateTexture(const std::string& filename, GLenum type, GLuint uni
 	int channels;
 
 	u8* data = LoadImage(filename, width, height, channels);
-	ASSERT(data);
+	ASSERT_MSG(data, "Error loading texture.");
 
 	glGenTextures(1, &m_texture);
 	glBindTexture(type, m_texture);
@@ -46,6 +46,63 @@ void Texture::CreateTexture(const std::string& filename, GLenum type, GLuint uni
 #endif
 }
 
+void Texture::CreateTextureCube(std::vector<std::string> filenames, GLuint unit)
+{
+	m_type = GL_TEXTURE_CUBE_MAP;
+	m_unit = unit;
+	   
+	GLuint targets[] =
+	{
+		GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+		GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+		GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+		GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+		GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+		GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+	};
+
+	// create texture
+	glGenTextures(1, &m_texture);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, m_texture);
+	
+	// load / create cube maps
+	for (size_t i = 0; i < 6; i++)
+	{
+		// create filename
+		std::string filename = filenames[i];
+
+		// load cube map image
+		int width;
+		int height;
+		int channels;
+		u8* data = LoadImage(filename, width, height, channels);
+		ASSERT_MSG(data, "Error loading texture.");
+
+		// set texture image
+		GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
+		glTexImage2D(targets[i], 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+	}
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);    
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);    
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+}
+
+std::vector<std::string> Texture::GenerateCubeMapNames(const std::string& basename, const std::vector<std::string>& suffixes, const std::string& extension)
+{
+	std::vector<std::string> names;
+	for (size_t i = 0; i < 6; i++)
+	{
+		std::string name = basename + suffixes[i] + extension;
+		names.push_back(name);
+	}
+
+	return names;
+}
+
 void Texture::Bind()
 {
 	glActiveTexture(m_unit);
@@ -55,7 +112,7 @@ void Texture::Bind()
 #ifdef STB_IMAGE_IMPLEMENTATION
 u8* Texture::LoadImage(const std::string& filename, int& width, int& height, int& channels)
 {
-	stbi_set_flip_vertically_on_load(true);
+	stbi_set_flip_vertically_on_load(false);
 	u8* image = stbi_load(filename.c_str(), &width, &height, &channels, 0);
 
 	return image;
@@ -90,4 +147,5 @@ u8* Texture::LoadImage(const std::string& filename, int& width, int& height, int
 
 	return image;
 }
+
 #endif 

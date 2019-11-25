@@ -154,6 +154,9 @@
     <ClCompile Include="game\fx_scene.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
+    <ClCompile Include="game\cube_scene.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\assert.h">
@@ -291,6 +294,9 @@
     <ClInclude Include="game\fx_scene.h">
       <Filter>source\game</Filter>
     </ClInclude>
+    <ClInclude Include="game\cube_scene.h">
+      <Filter>source\game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="builds\content\shaders\basic.vert">
@@ -357,6 +363,18 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="builds\content\shaders\texture_phong_normal.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\cube_map.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\cube_map.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\skybox.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\skybox.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>
