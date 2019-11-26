@@ -21,8 +21,13 @@ void Model::Draw(GLenum primitiveType)
 	m_shader->SetUniform("view_matrix", view_matrix);
 	m_shader->SetUniform("projection_matrix", projection_matrix);
 
+	m_shader->SetUniform("view_matrix", view_matrix);
+	m_shader->SetUniform("projection_matrix", projection_matrix);
+	
+	glDepthMask(GL_FALSE);
 	m_mesh->SetShader(m_shader.get());
 	m_mesh->Draw();
+	glDepthMask(GL_TRUE);
 }
 
 void Model::Edit()
