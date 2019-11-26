@@ -46,16 +46,74 @@ void Texture::CreateTexture(const std::string& filename, GLenum type, GLuint uni
 #endif
 }
 
+void Texture::CreateCubeTexture(const std::vector<std::string>& filenames, GLuint unit)
+{
+	m_type = GL_TEXTURE_CUBE_MAP;
+	m_unit = unit;
+
+	glGenTextures(1, &m_texture);
+	glBindTexture(m_type, m_texture);
+
+	int width;
+	int height;
+	int channels;
+
+	GLuint targets[] =
+	{
+		GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+		GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+		GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+		GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+		GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+		GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+	};
+
+	for (size_t i = 0; i < filenames.size(); i++)
+	{
+		u8* data = LoadImage(filenames[i], width, height, channels);
+		ASSERT(data);
+
+		GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
+		glTexImage2D(targets[i], 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+
+#ifdef STB_IMAGE_IMPLEMENTATION
+		stbi_image_free(data);
+#else
+		delete data;
+#endif
+	}
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+}
+
 void Texture::Bind()
 {
 	glActiveTexture(m_unit);
 	glBindTexture(m_type, m_texture);
 }
 
+std::vector<std::string> Texture::GenerateCubeMapNames(const std::string& basename, const std::vector<std::string>& suffixes, const std::string& extension)
+{
+	std::vector<std::string> names;
+	for (size_t i = 0; i < 6; i++)
+	{
+		std::string name = basename + suffixes[i] + extension;
+		names.push_back(name);
+	}
+
+	return names;
+}
+
 #ifdef STB_IMAGE_IMPLEMENTATION
 u8* Texture::LoadImage(const std::string& filename, int& width, int& height, int& channels)
 {
-	stbi_set_flip_vertically_on_load(true);
+	stbi_set_flip_vertically_on_load(false);
 	u8* image = stbi_load(filename.c_str(), &width, &height, &channels, 0);
 
 	return image;
