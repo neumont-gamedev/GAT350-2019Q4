@@ -76,6 +76,7 @@ bool CubemapScene::Create(const Name& name)
 	model->m_transform.translation = glm::vec3(0);
 	model->m_transform.scale = glm::vec3(1);
 	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/cube.obj");
+	model->m_mesh->m_flags = BIT(Mesh::CULL_FRONT);
 	model->m_mesh->m_material = m_engine->Resources()->Get<Material>("material");
 	model->m_shader = m_engine->Resources()->Get<Program>("skybox_shader");
 	Add(std::move(model));
@@ -131,6 +132,12 @@ void CubemapScene::Update()
 	auto light = Get<Light>("light");
 	light->m_transform.translation = light->m_transform.translation * glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 0, 1));
 	light->SetShader(shader.get());
+
+	//auto model = Get<Model>("model1");
+	//shader = m_engine->Resources()->Get<Program>("cube_map_shader");
+	//shader->Use();
+	//shader->SetUniform("model_matrix", model->m_transform.GetMatrix());
+	//shader->SetUniform("camera_position", Get<Camera>("camera")->m_transform.translation);
 
 	// gui
 	GUI::Update(m_engine->GetEvent());

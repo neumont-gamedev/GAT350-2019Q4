@@ -168,7 +168,8 @@
     <ClCompile Include="engine\renderer\texture.cpp" />
     <ClCompile Include="engine\renderer\vertex_array.cpp" />
     <ClCompile Include="engine\renderer\vertex_index_array.cpp" />
-    <ClCompile Include="game\cube_scene.cpp" />
+    <ClCompile Include="game\bump_scene.cpp" />
+    <ClCompile Include="game\cubemap_scene.cpp" />
     <ClCompile Include="game\fx_scene.cpp" />
     <ClCompile Include="game\lights_scene.cpp" />
     <ClCompile Include="game\light_scene.cpp" />
@@ -217,7 +218,8 @@
     <ClInclude Include="engine\renderer\vertex_index_array.h" />
     <ClInclude Include="framework\factory.h" />
     <ClInclude Include="framework\object_manager.h" />
-    <ClInclude Include="game\cube_scene.h" />
+    <ClInclude Include="game\bump_scene.h" />
+    <ClInclude Include="game\cubemap_scene.h" />
     <ClInclude Include="game\fx_scene.h" />
     <ClInclude Include="game\lights_scene.h" />
     <ClInclude Include="game\light_scene.h" />
