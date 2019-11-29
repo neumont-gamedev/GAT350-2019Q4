@@ -24,7 +24,7 @@ public:
 
 public:
 	std::shared_ptr<Material> m_material;
-	std::bitset<32> m_flags = BIT(ENABLE_DEPTH_TEST) | BIT(CULL_BACK);
+	std::bitset<32> m_flags = { BIT(ENABLE_DEPTH_TEST) | BIT(CULL_BACK) };
 
 protected:
 	VertexArray m_vertex_array;
