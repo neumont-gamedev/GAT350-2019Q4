@@ -67,7 +67,7 @@ bool CubeScene::Create(const Name& name)
 		auto texture = std::make_unique<Texture>();  
 		std::vector<std::string> suffixes = { "_posx", "_negx", "_posy", "_negy", "_posz", "_negz" };
 		std::vector<std::string> names = Texture::GenerateCubeMapNames("textures/lancellotti", suffixes, ".jpg");
-		texture->CreateTextureCube(names);
+		texture->CreateCubeTexture(names);
 		m_engine->Resources()->Add("cube_texture", std::move(texture));
 
 		material->textures.push_back(m_engine->Resources()->Get<Texture>("cube_texture"));

@@ -154,7 +154,7 @@
     <ClCompile Include="game\fx_scene.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
-    <ClCompile Include="game\cube_scene.cpp">
+    <ClCompile Include="game\cubemap_scene.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -294,7 +294,7 @@
     <ClInclude Include="game\fx_scene.h">
       <Filter>source\game</Filter>
     </ClInclude>
-    <ClInclude Include="game\cube_scene.h">
+    <ClInclude Include="game\cubemap_scene.h">
       <Filter>source\game</Filter>
     </ClInclude>
   </ItemGroup>
@@ -375,6 +375,12 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="builds\content\shaders\skybox.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\reflection.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\reflection.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>
