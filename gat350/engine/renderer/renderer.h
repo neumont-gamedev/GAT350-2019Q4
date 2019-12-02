@@ -19,7 +19,15 @@ public:
 	SDL_Window* GetWindow() { return m_window; }
 	SDL_GLContext GetContext() { return m_context; }
 
+	void SetViewport(u32 x, u32 y, u32 width, u32 height) { glViewport(x, y, width, height); }
+	void RestoreViewport() { glViewport(0, 0, m_width, m_height); }
+
+	u32 GetWindowWidth() { return m_width; }
+	u32 GetWindowHeight() { return m_height; }
+
 private:
 	SDL_Window* m_window = nullptr;
 	SDL_GLContext m_context;
+	u32 m_width;
+	u32 m_height;
 };

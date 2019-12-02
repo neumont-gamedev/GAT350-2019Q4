@@ -22,6 +22,8 @@ private:
 template<typename TBase>
 inline void ObjectManager<TBase>::Add(const Name& name, std::unique_ptr<TBase> object)
 {
+	ASSERT(m_objects.find(name) == m_objects.end());
+
 	auto iter = m_objects.find(name);
 	if (iter == m_objects.end())
 	{

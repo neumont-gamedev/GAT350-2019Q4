@@ -46,6 +46,20 @@ void Texture::CreateTexture(const std::string& filename, GLenum type, GLuint uni
 #endif
 }
 
+void Texture::CreateTexture(u32 width, u32 height, GLenum format, GLenum type, GLuint unit)
+{
+	m_type = type;
+	m_unit = unit;
+
+	glGenTextures(1, &m_texture);
+	glBindTexture(type, m_texture);
+
+	glTexImage2D(type, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
+
+	glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
 void Texture::CreateCubeTexture(const std::vector<std::string>& filenames, GLuint unit)
 {
 	m_type = GL_TEXTURE_CUBE_MAP;
@@ -91,6 +105,43 @@ void Texture::CreateCubeTexture(const std::vector<std::string>& filenames, GLuin
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 }
+
+//void Texture::CreateDepthTexture(u32 width, u32 height)
+//{
+//	glGenTextures(1, &m_texture);
+//	glBindTexture(GL_TEXTURE_2D, m_texture);
+//
+//	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+//
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+//}
+//
+//void Texture::CreateFramebuffer(u32 width, u32 height, GLenum format)
+//{
+//	glGenFramebuffers(1, &m_framebuffer);
+//	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
+//
+//	CreateTexture(width, height, format);
+//
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture, 0);
+//
+//	glGenRenderbuffers(1, &m_depthbuffer);
+//	glBindRenderbuffer(GL_RENDERBUFFER, m_depthbuffer);
+//	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+//
+//	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthbuffer);
+//
+//	GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
+//	glDrawBuffers(1, drawBuffers);
+//
+//	GLenum result = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+//	ASSERT(result == GL_FRAMEBUFFER_COMPLETE);
+//
+//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//}
 
 void Texture::Bind()
 {
