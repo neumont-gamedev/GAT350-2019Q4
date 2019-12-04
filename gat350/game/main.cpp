@@ -4,6 +4,7 @@
 #include "cubemap_scene.h"
 #include "framebuffer_scene.h"
 #include "fx_scene.h"
+#include "framebuffer_scene.h"
 #include "../engine/engine.h"
 #include "../engine/editor/editor.h"
 
