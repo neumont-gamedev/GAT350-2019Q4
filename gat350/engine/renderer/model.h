@@ -11,6 +11,7 @@ public:
 
 	void Update() override;
 	void Draw(GLenum primitiveType = GL_TRIANGLES) override;
+	void Draw(Program* shader, GLenum primitiveType = GL_TRIANGLES);
 	void Edit() override;
 
 public:

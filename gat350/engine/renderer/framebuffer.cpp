@@ -21,8 +21,16 @@ void Framebuffer::AttachTexture(const std::shared_ptr<Texture>& texture, GLenum 
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, m_texture->m_texture, 0);
 
-	GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
-	glDrawBuffers(1, drawBuffers);
+	if (attachment == GL_DEPTH_ATTACHMENT)
+	{
+		GLenum drawBuffers[] = { GL_NONE };
+		glDrawBuffers(1, drawBuffers);
+	}
+	else
+	{
+		GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
+		glDrawBuffers(1, drawBuffers);
+	}
 
 	GLenum result = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	ASSERT(result == GL_FRAMEBUFFER_COMPLETE);
