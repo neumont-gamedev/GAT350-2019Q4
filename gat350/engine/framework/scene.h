@@ -25,6 +25,29 @@ public:
 
 		return nullptr;
 	}
+		
+	void SetActive(const Name& name)
+	{
+		for (auto& actor : m_actors)
+		{
+			actor->m_active = (actor->m_name == name);
+		}
+	}
+
+	template<typename T>
+	T* GetActive()
+	{
+		for (auto& actor : m_actors)
+		{
+			if (actor->m_active)
+			{
+				return dynamic_cast<T*>(actor.get());
+			}
+		}
+
+		return nullptr;
+	}
+
 
 	template<typename T>
 	std::vector<T*> Get()

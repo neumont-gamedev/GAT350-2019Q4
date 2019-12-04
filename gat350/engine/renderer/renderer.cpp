@@ -7,6 +7,9 @@ bool Renderer::Initialize()
 
 bool Renderer::Initialize(u32 width, u32 height, bool fullscreen)
 {
+	m_width = width;
+	m_height = height;
+
 	Uint32 flags = SDL_WINDOW_OPENGL;
 	flags |= (fullscreen) ? SDL_WINDOW_FULLSCREEN : 0;
 

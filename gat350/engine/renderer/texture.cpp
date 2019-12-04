@@ -46,6 +46,22 @@ void Texture::CreateTexture(const std::string& filename, GLenum type, GLuint uni
 #endif
 }
 
+void Texture::CreateTexture(u32 width, u32 height, GLenum format, GLenum type, GLuint unit)
+{
+	m_type = type;
+	m_unit = unit;
+
+	glGenTextures(1, &m_texture);
+	glBindTexture(type, m_texture);
+
+	glTexImage2D(type, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
+
+	glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
+}
+
 void Texture::CreateCubeTexture(const std::vector<std::string>& filenames, GLuint unit)
 {
 	m_type = GL_TEXTURE_CUBE_MAP;

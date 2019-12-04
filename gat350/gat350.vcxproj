@@ -158,6 +158,7 @@
     <ClCompile Include="engine\math\math.cpp" />
     <ClCompile Include="engine\math\transform.cpp" />
     <ClCompile Include="engine\renderer\camera.cpp" />
+    <ClCompile Include="engine\renderer\framebuffer.cpp" />
     <ClCompile Include="engine\renderer\gui.cpp" />
     <ClCompile Include="engine\renderer\light.cpp" />
     <ClCompile Include="engine\renderer\material.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="engine\renderer\vertex_array.cpp" />
     <ClCompile Include="engine\renderer\vertex_index_array.cpp" />
     <ClCompile Include="game\cubemap_scene.cpp" />
+    <ClCompile Include="game\framebuffer_scene.cpp" />
     <ClCompile Include="game\fx_scene.cpp" />
     <ClCompile Include="game\lights_scene.cpp" />
     <ClCompile Include="game\light_scene.cpp" />
@@ -205,6 +207,7 @@
     <ClInclude Include="engine\math\math.h" />
     <ClInclude Include="engine\math\transform.h" />
     <ClInclude Include="engine\renderer\camera.h" />
+    <ClInclude Include="engine\renderer\framebuffer.h" />
     <ClInclude Include="engine\renderer\gui.h" />
     <ClInclude Include="engine\renderer\light.h" />
     <ClInclude Include="engine\renderer\material.h" />
@@ -218,6 +221,7 @@
     <ClInclude Include="framework\factory.h" />
     <ClInclude Include="framework\object_manager.h" />
     <ClInclude Include="game\cubemap_scene.h" />
+    <ClInclude Include="game\framebuffer_scene.h" />
     <ClInclude Include="game\fx_scene.h" />
     <ClInclude Include="game\lights_scene.h" />
     <ClInclude Include="game\light_scene.h" />
