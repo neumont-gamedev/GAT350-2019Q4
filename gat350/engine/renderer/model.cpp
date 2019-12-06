@@ -8,7 +8,7 @@ void Model::Update()
 void Model::Draw(GLenum primitiveType)
 {
 	auto camera = m_scene->GetActive<Camera>();
-	//ASSERT(!cameras.empty());
+	ASSERT(camera);
 
 	glm::mat4 model_view_matrix = camera->m_view_matrix * m_transform.GetMatrix();
 	glm::mat4 mvp_matrix = camera->m_projection_matrix * model_view_matrix;
@@ -25,6 +25,31 @@ void Model::Draw(GLenum primitiveType)
 	m_shader->SetUniform("projection_matrix", projection_matrix);
 	
 	m_mesh->SetShader(m_shader.get());
+	m_mesh->Draw();
+}
+
+void Model::Draw(Program* shader, GLenum primitiveType)
+{
+	ASSERT(shader);
+
+	auto camera = m_scene->GetActive<Camera>();
+	ASSERT(camera);
+
+	glm::mat4 model_view_matrix = camera->m_view_matrix * m_transform.GetMatrix();
+	glm::mat4 mvp_matrix = camera->m_projection_matrix * model_view_matrix;
+	glm::mat4 view_matrix = glm::mat4(glm::mat3(camera->m_view_matrix));
+	glm::mat4 projection_matrix = camera->m_projection_matrix;
+
+	shader->Use();
+
+	shader->SetUniform("camera_position", camera->m_transform.translation);
+	shader->SetUniform("model_matrix", m_transform.GetMatrix());
+	shader->SetUniform("model_view_matrix", model_view_matrix);
+	shader->SetUniform("mvp_matrix", mvp_matrix);
+	shader->SetUniform("view_matrix", view_matrix);
+	shader->SetUniform("projection_matrix", projection_matrix);
+
+	m_mesh->SetShader(shader);
 	m_mesh->Draw();
 }
 

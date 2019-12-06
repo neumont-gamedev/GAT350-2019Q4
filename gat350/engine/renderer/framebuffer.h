@@ -16,8 +16,6 @@ public:
 	void Bind();
 	void Unbind();
 
-
-
 public:
 	GLuint m_framebuffer = 0;
 	GLuint m_depthbuffer = 0;

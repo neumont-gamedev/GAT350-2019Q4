@@ -54,12 +54,11 @@ void Texture::CreateTexture(u32 width, u32 height, GLenum target, GLenum format,
 	glGenTextures(1, &m_texture);
 	glBindTexture(target, m_texture);
 
-	GLenum data_type = (GL_DEPTH_COMPONENT) ? GL_FLOAT : GL_UNSIGNED_BYTE;
-
+	GLenum data_type = (format == GL_DEPTH_COMPONENT) ? GL_FLOAT : GL_UNSIGNED_BYTE;
 	glTexImage2D(target, 0, format, width, height, 0, format, data_type, nullptr);
 
-	glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
