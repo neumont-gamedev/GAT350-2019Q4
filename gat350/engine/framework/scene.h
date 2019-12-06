@@ -27,13 +27,26 @@ public:
 	}
 		
 	template<typename T>
-	void SetActive(const Name& name)
+	void SetActive(const Name& name, bool unique = false)
 	{
 		for (auto& actor : m_actors)
 		{
 			if (dynamic_cast<T*>(actor.get()))
 			{
-				actor->m_active = (actor->m_name == name);
+				if (unique) actor->m_active = (actor->m_name == name);
+				else if (actor->m_name == name) actor->m_active = true;
+			}
+		}
+	}
+
+	template<typename T>
+	void SetInactive(const Name& name)
+	{
+		for (auto& actor : m_actors)
+		{
+			if (dynamic_cast<T*>(actor.get()))
+			{
+				if (actor->m_name == name) actor->m_active = false;
 			}
 		}
 	}

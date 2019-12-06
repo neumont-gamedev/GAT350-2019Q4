@@ -407,5 +407,17 @@
     <None Include="builds\content\shaders\depth_debug.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="builds\content\shaders\phong_shadow.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\phong_shadow.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\shadowmap.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="builds\content\shaders\shadowmap.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

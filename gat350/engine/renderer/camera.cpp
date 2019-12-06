@@ -46,10 +46,10 @@ void Camera::Update()
 
 		translation = translation * 5.0f * g_timer.dt();
 		m_transform.translation = m_transform.translation + (m_transform.rotation * translation);
-	}
 
-	glm::vec3 target = m_transform.translation + m_transform.rotation * glm::vec3(0.0f, 0.0f, 1.0f);
-	m_view_matrix = glm::lookAt(m_transform.translation, target, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::vec3 target = m_transform.translation + m_transform.rotation * glm::vec3(0.0f, 0.0f, 1.0f);
+		m_view_matrix = glm::lookAt(m_transform.translation, target, glm::vec3(0.0f, 1.0f, 0.0f));
+	}
 }
 
 void Camera::SetProjection(float fov, float aspect_ratio, float near_clip, float far_clip)

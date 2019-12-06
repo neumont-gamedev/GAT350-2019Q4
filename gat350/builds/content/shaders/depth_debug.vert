@@ -8,6 +8,6 @@ out vec2 ftexcoord;
 void main()
 {
 	ftexcoord = vtexcoord;
-	vec3 position = (vposition * 0.5);
+	vec3 position = (vposition * 0.25) + vec3(0.65, 0.65, 0.0);
    	gl_Position = vec4(position, 1.0);
 }

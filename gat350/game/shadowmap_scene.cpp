@@ -17,13 +17,30 @@
 bool ShadowmapScene::Create(const Name& name)
 {
 	// shader
+	//auto shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
+	//shader->m_name = "shader";
+	//shader->m_engine = m_engine;
+	//shader->CreateShaderFromFile("shaders/texture_phong.vert", GL_VERTEX_SHADER);
+	//shader->CreateShaderFromFile("shaders/texture_phong_light.frag", GL_FRAGMENT_SHADER);
+	//shader->Link();
+	//m_engine->Resources()->Add("phong_shader", std::move(shader));
+
 	auto shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
 	shader->m_name = "shader";
 	shader->m_engine = m_engine;
-	shader->CreateShaderFromFile("shaders/texture_phong.vert", GL_VERTEX_SHADER);
-	shader->CreateShaderFromFile("shaders/texture_phong_light.frag", GL_FRAGMENT_SHADER);
+	shader->CreateShaderFromFile("shaders/phong_shadow.vert", GL_VERTEX_SHADER);
+	shader->CreateShaderFromFile("shaders/phong_shadow.frag", GL_FRAGMENT_SHADER);
 	shader->Link();
-	m_engine->Resources()->Add("phong_shader", std::move(shader));
+	m_engine->Resources()->Add("phong_shadow", std::move(shader));
+
+
+	shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
+	shader->m_name = "shader";
+	shader->m_engine = m_engine;
+	shader->CreateShaderFromFile("shaders/shadowmap.vert", GL_VERTEX_SHADER);
+	shader->CreateShaderFromFile("shaders/shadowmap.frag", GL_FRAGMENT_SHADER);
+	shader->Link();
+	m_engine->Resources()->Add("shadowmap", std::move(shader));
 
 	shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
 	shader->m_name = "shader";
@@ -47,7 +64,7 @@ bool ShadowmapScene::Create(const Name& name)
 		framebuffer->Create("framebuffer");
 
 		auto texture = m_engine->Factory()->Create<Texture>(Texture::GetClassName());
-		texture->CreateTexture(SHADOWMAP_SIZE, SHADOWMAP_SIZE, GL_TEXTURE_2D, GL_DEPTH_COMPONENT);
+		texture->CreateTexture(SHADOWMAP_SIZE, SHADOWMAP_SIZE, GL_TEXTURE_2D, GL_DEPTH_COMPONENT, GL_TEXTURE1);
 		m_engine->Resources()->Add("render_texture", std::move(texture));
 
 		framebuffer->AttachTexture(m_engine->Resources()->Get<Texture>("render_texture"), GL_DEPTH_ATTACHMENT);
@@ -59,25 +76,27 @@ bool ShadowmapScene::Create(const Name& name)
 	auto material = m_engine->Factory()->Create<Material>(Material::GetClassName());
 	material->m_name = "material";
 	material->m_engine = m_engine;
-	material->ambient = glm::vec3(1.0f);
-	material->diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
-	material->specular = glm::vec3(1.0f);
-	material->shininess = 128.0f;
+	material->ambient = glm::vec3(1);
+	material->diffuse = glm::vec3(1);
+	material->specular = glm::vec3(1);
+	material->shininess = 16.0f;
 
 	// texture
-	//auto texture = m_engine->Resources()->Get<Texture>("textures/uvgrid.jpg");
-	//material->textures.push_back(texture);
+	auto texture = m_engine->Resources()->Get<Texture>("textures/uvgrid.jpg");
+	material->textures.push_back(texture);
+	texture = m_engine->Resources()->Get<Texture>("render_texture");
+	material->textures.push_back(texture);
 	m_engine->Resources()->Add("material", std::move(material));
 
 	// render material
 	material = m_engine->Factory()->Create<Material>(Material::GetClassName());
 	material->m_name = "material";
 	material->m_engine = m_engine;
-	material->ambient = glm::vec3(1.0f);
-	material->diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
-	material->specular = glm::vec3(1.0f);
-	material->shininess = 128.0f;
-	auto texture = m_engine->Resources()->Get<Texture>("render_texture");
+	material->ambient = glm::vec3(1);
+	material->diffuse = glm::vec3(1);
+	material->specular = glm::vec3(1);
+	material->shininess = 16.0f;
+	texture = m_engine->Resources()->Get<Texture>("render_texture");
 	material->textures.push_back(texture);
 	m_engine->Resources()->Add("render_material", std::move(material));
 	
@@ -85,10 +104,10 @@ bool ShadowmapScene::Create(const Name& name)
 	material = m_engine->Factory()->Create<Material>(Material::GetClassName());
 	material->m_name = "material";
 	material->m_engine = m_engine;
-	material->ambient = glm::vec3(1.0f);
-	material->diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
-	material->specular = glm::vec3(1.0f);
-	material->shininess = 128.0f;
+	material->ambient = glm::vec3(1);
+	material->diffuse = glm::vec3(1);
+	material->specular = glm::vec3(1);
+	material->shininess = 16.0f;
 	m_engine->Resources()->Add("debug_material", std::move(material));
 
 	// scene actors
@@ -102,7 +121,7 @@ bool ShadowmapScene::Create(const Name& name)
 	model->m_transform.scale = glm::vec3(1);
 	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/suzanne.obj");
 	model->m_mesh->m_material = m_engine->Resources()->Get<Material>("material");
-	model->m_shader = m_engine->Resources()->Get<Program>("phong_shader");
+	model->m_shader = m_engine->Resources()->Get<Program>("phong_shadow");
 	Add(std::move(model));
 
 	model = m_engine->Factory()->Create<Model>(Model::GetClassName());
@@ -113,7 +132,7 @@ bool ShadowmapScene::Create(const Name& name)
 	model->m_transform.scale = glm::vec3(20);
 	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/plane.obj");
 	model->m_mesh->m_material = m_engine->Resources()->Get<Material>("material");
-	model->m_shader = m_engine->Resources()->Get<Program>("phong_shader");
+	model->m_shader = m_engine->Resources()->Get<Program>("phong_shadow");
 	Add(std::move(model));
 
 	model = m_engine->Factory()->Create<Model>(Model::GetClassName());
@@ -161,10 +180,8 @@ bool ShadowmapScene::Create(const Name& name)
 		camera->m_engine = m_engine;
 		camera->m_scene = this;
 		camera->m_user_camera = false;
-		//camera->Create("buffer_camera");
-		camera->m_transform.translation = glm::vec3(0.0f, 0.0f, 5.0f);
-		camera->m_transform.rotation = glm::angleAxis(glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		camera->SetProjection(45.0f, 1.0f, 0.01f, 100.0f);
+		camera->m_view_matrix = glm::lookAt(glm::vec3(0, 3, 2), glm::vec3(0), glm::vec3(0, 1, 0));
+		camera->m_projection_matrix = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 20.0f);
 		Add(std::move(camera));
 	}
 
@@ -181,11 +198,29 @@ void ShadowmapScene::Update()
 	}
 
 	// set shader uniforms
-	auto shader = m_engine->Resources()->Get<Program>("phong_shader");
-
 	auto light = Get<Light>("light");
 	light->m_transform.translation = light->m_transform.translation * glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
+
+
+	glm::mat4 bias_matrix(
+		0.5f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f
+	);
+
+	glm::mat4 projection_matrix = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 20.0f);
+	glm::mat4 light_view_matrix = glm::lookAt(light->m_transform.translation, glm::vec3(0), glm::vec3(0, 1, 0));
+	glm::mat4 lvp_matrix = projection_matrix * light_view_matrix;
+
+	auto shader = m_engine->Resources()->Get<Program>("phong_shadow");
+	shader->Use();
+	shader->SetUniform("lvp_matrix", bias_matrix * lvp_matrix);
 	light->SetShader(shader.get());
+
+	shader = m_engine->Resources()->Get<Program>("shadowmap");
+	shader->Use();
+	shader->SetUniform("lvp_matrix", lvp_matrix);
 
 	// gui
 	GUI::Update(m_engine->GetEvent());
@@ -209,27 +244,33 @@ void ShadowmapScene::RenderToTexture()
 {
 	auto framebuffer = m_engine->Resources()->Get<Framebuffer>("framebuffer");
 	framebuffer->Bind();
+	auto texture = m_engine->Resources()->Get<Texture>("render_texture");
+	texture->Bind();
 
-	SetActive<Camera>("buffer_camera");
+	SetActive<Camera>("buffer_camera", true);
 
 	m_engine->Get<Renderer>()->SetViewport(0, 0, SHADOWMAP_SIZE, SHADOWMAP_SIZE);
 	m_engine->Get<Renderer>()->ClearBuffer();
 
-	Scene::Draw();
-	//auto model = Get<Model>("model1");
-	//model->Draw();
+	auto shader = m_engine->Resources()->Get<Program>("shadowmap");
+	auto model = Get<Model>("model1");
+	model->Draw(shader.get());
+
+	model = Get<Model>("model2");
+	model->Draw(shader.get());
+
+	//SetInactive<Model>("model3");
+	//Scene::Draw();
 
 	framebuffer->Unbind();
 }
 
 void ShadowmapScene::RenderScene()
 {
-	SetActive<Camera>("camera");
+	SetActive<Camera>("camera", true);
 
 	m_engine->Get<Renderer>()->RestoreViewport();
 	m_engine->Get<Renderer>()->ClearBuffer();
 
-	//Scene::Draw();
-	auto model = Get<Model>("model3");
-	model->Draw();
+	Scene::Draw();	
 }
