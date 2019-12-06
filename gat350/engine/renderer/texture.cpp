@@ -16,9 +16,9 @@ bool Texture::Create(const Name& name)
 	return true;
 }
 
-void Texture::CreateTexture(const std::string& filename, GLenum type, GLuint unit)
+void Texture::CreateTexture(const std::string& filename, GLenum target, GLuint unit)
 {
-	m_type = type;
+	m_target = target;
 	m_unit = unit;
 
 	int width;
@@ -29,15 +29,15 @@ void Texture::CreateTexture(const std::string& filename, GLenum type, GLuint uni
 	ASSERT(data);
 
 	glGenTextures(1, &m_texture);
-	glBindTexture(type, m_texture);
+	glBindTexture(target, m_texture);
 
 	GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
-	glTexImage2D(type, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(target, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
-	glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 #ifdef STB_IMAGE_IMPLEMENTATION
 	stbi_image_free(data);
@@ -46,29 +46,31 @@ void Texture::CreateTexture(const std::string& filename, GLenum type, GLuint uni
 #endif
 }
 
-void Texture::CreateTexture(u32 width, u32 height, GLenum format, GLenum type, GLuint unit)
+void Texture::CreateTexture(u32 width, u32 height, GLenum target, GLenum format, GLuint unit)
 {
-	m_type = type;
+	m_target = target;
 	m_unit = unit;
 
 	glGenTextures(1, &m_texture);
-	glBindTexture(type, m_texture);
+	glBindTexture(target, m_texture);
 
-	glTexImage2D(type, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
+	GLenum data_type = (GL_DEPTH_COMPONENT) ? GL_FLOAT : GL_UNSIGNED_BYTE;
 
-	glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexImage2D(target, 0, format, width, height, 0, format, data_type, nullptr);
+
+	glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
 void Texture::CreateCubeTexture(const std::vector<std::string>& filenames, GLuint unit)
 {
-	m_type = GL_TEXTURE_CUBE_MAP;
+	m_target = GL_TEXTURE_CUBE_MAP;
 	m_unit = unit;
 
 	glGenTextures(1, &m_texture);
-	glBindTexture(m_type, m_texture);
+	glBindTexture(m_target, m_texture);
 
 	int width;
 	int height;
@@ -111,7 +113,7 @@ void Texture::CreateCubeTexture(const std::vector<std::string>& filenames, GLuin
 void Texture::Bind()
 {
 	glActiveTexture(m_unit);
-	glBindTexture(m_type, m_texture);
+	glBindTexture(m_target, m_texture);
 }
 
 std::vector<std::string> Texture::GenerateCubeMapNames(const std::string& basename, const std::vector<std::string>& suffixes, const std::string& extension)

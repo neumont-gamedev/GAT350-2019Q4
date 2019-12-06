@@ -148,9 +148,17 @@ void CubemapScene::Update()
 	auto model = Get<Model>("model2");
 	model->m_transform.rotation = model->m_transform.rotation * glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
 	
+	shader = m_engine->Resources()->Get<Program>("reflection_shader");
+	shader->Use();
+	shader->SetUniform("mixer", m_mix);
+	shader->SetUniform("index", m_index);
+
 	// gui
 	GUI::Update(m_engine->GetEvent());
 	GUI::Begin(m_engine->Get<Renderer>());
+
+	ImGui::SliderFloat("Mix", &m_mix, 0.0f, 1.0f);
+	ImGui::SliderFloat("Index", &m_index, 1.0f, 3.0f);
 
 	m_engine->Get<Editor>()->UpdateGUI();
 

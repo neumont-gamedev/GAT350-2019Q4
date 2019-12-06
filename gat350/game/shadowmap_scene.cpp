@@ -1,4 +1,4 @@
-#include "framebuffer_scene.h"
+#include "shadowmap_scene.h"
 #include "../engine/engine.h"
 #include "../engine/editor/editor.h"
 #include "../engine/renderer/renderer.h"
@@ -12,7 +12,9 @@
 #include "../engine/renderer/camera.h"
 #include "../engine/renderer/gui.h"
 
-bool FramebufferScene::Create(const Name& name)
+#define SHADOWMAP_SIZE 512
+
+bool ShadowmapScene::Create(const Name& name)
 {
 	// shader
 	auto shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
@@ -26,10 +28,10 @@ bool FramebufferScene::Create(const Name& name)
 	shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
 	shader->m_name = "shader";
 	shader->m_engine = m_engine;
-	shader->CreateShaderFromFile("shaders/texture_phong_fx.vert", GL_VERTEX_SHADER);
-	shader->CreateShaderFromFile("shaders/texture_phong_fx.frag", GL_FRAGMENT_SHADER);
+	shader->CreateShaderFromFile("shaders/depth_debug.vert", GL_VERTEX_SHADER);
+	shader->CreateShaderFromFile("shaders/depth_debug.frag", GL_FRAGMENT_SHADER);
 	shader->Link();
-	m_engine->Resources()->Add("phong_shader_fx", std::move(shader));
+	m_engine->Resources()->Add("depth_debug", std::move(shader));
 
 	shader = m_engine->Factory()->Create<Program>(Program::GetClassName());
 	shader->m_name = "shader";
@@ -43,13 +45,12 @@ bool FramebufferScene::Create(const Name& name)
 	{
 		auto framebuffer = m_engine->Factory()->Create<Framebuffer>(Framebuffer::GetClassName());
 		framebuffer->Create("framebuffer");
-		framebuffer->CreateDepthbuffer(512, 512);
 
 		auto texture = m_engine->Factory()->Create<Texture>(Texture::GetClassName());
-		texture->CreateTexture(512, 512);
+		texture->CreateTexture(SHADOWMAP_SIZE, SHADOWMAP_SIZE, GL_TEXTURE_2D, GL_DEPTH_COMPONENT);
 		m_engine->Resources()->Add("render_texture", std::move(texture));
 
-		framebuffer->AttachTexture(m_engine->Resources()->Get<Texture>("render_texture"));
+		framebuffer->AttachTexture(m_engine->Resources()->Get<Texture>("render_texture"), GL_DEPTH_ATTACHMENT);
 		framebuffer->Unbind();
 		m_engine->Resources()->Add("framebuffer", std::move(framebuffer));
 	}
@@ -64,8 +65,8 @@ bool FramebufferScene::Create(const Name& name)
 	material->shininess = 128.0f;
 
 	// texture
-	auto texture = m_engine->Resources()->Get<Texture>("textures/uvgrid.jpg");
-	material->textures.push_back(texture);
+	//auto texture = m_engine->Resources()->Get<Texture>("textures/uvgrid.jpg");
+	//material->textures.push_back(texture);
 	m_engine->Resources()->Add("material", std::move(material));
 
 	// render material
@@ -76,7 +77,7 @@ bool FramebufferScene::Create(const Name& name)
 	material->diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
 	material->specular = glm::vec3(1.0f);
 	material->shininess = 128.0f;
-	texture = m_engine->Resources()->Get<Texture>("render_texture");
+	auto texture = m_engine->Resources()->Get<Texture>("render_texture");
 	material->textures.push_back(texture);
 	m_engine->Resources()->Add("render_material", std::move(material));
 	
@@ -108,11 +109,22 @@ bool FramebufferScene::Create(const Name& name)
 	model->m_name = "model2";
 	model->m_engine = m_engine;
 	model->m_scene = this;
+	model->m_transform.translation = glm::vec3(0, -2, 0);
+	model->m_transform.scale = glm::vec3(20);
+	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/plane.obj");
+	model->m_mesh->m_material = m_engine->Resources()->Get<Material>("material");
+	model->m_shader = m_engine->Resources()->Get<Program>("phong_shader");
+	Add(std::move(model));
+
+	model = m_engine->Factory()->Create<Model>(Model::GetClassName());
+	model->m_name = "model3";
+	model->m_engine = m_engine;
+	model->m_scene = this;
 	model->m_transform.translation = glm::vec3(0);
 	model->m_transform.scale = glm::vec3(1);
-	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/cube.obj");
+	model->m_mesh = m_engine->Resources()->Get<Mesh>("meshes/quad.obj");
 	model->m_mesh->m_material = m_engine->Resources()->Get<Material>("render_material");
-	model->m_shader = m_engine->Resources()->Get<Program>("phong_shader");
+	model->m_shader = m_engine->Resources()->Get<Program>("depth_debug");
 	Add(std::move(model));
 
 	// light
@@ -159,18 +171,13 @@ bool FramebufferScene::Create(const Name& name)
 	return true;
 }
 
-void FramebufferScene::Update()
+void ShadowmapScene::Update()
 {
 	Scene::Update();
 
 	{
 		auto model = Get<Model>("model1");
 		model->m_transform.rotation = model->m_transform.rotation * glm::angleAxis(-glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
-	}
-
-	{
-		auto model = Get<Model>("model2");
-		model->m_transform.rotation = model->m_transform.rotation * glm::angleAxis(glm::radians(45.0f) * g_timer.dt(), glm::vec3(0, 1, 0));
 	}
 
 	// set shader uniforms
@@ -189,9 +196,8 @@ void FramebufferScene::Update()
 	GUI::End();
 }
 
-void FramebufferScene::Draw()
+void ShadowmapScene::Draw()
 {
-
 	RenderToTexture();
 	RenderScene();
 
@@ -199,29 +205,31 @@ void FramebufferScene::Draw()
 	m_engine->Get<Renderer>()->SwapBuffer();
 }
 
-void FramebufferScene::RenderToTexture()
+void ShadowmapScene::RenderToTexture()
 {
 	auto framebuffer = m_engine->Resources()->Get<Framebuffer>("framebuffer");
 	framebuffer->Bind();
 
 	SetActive<Camera>("buffer_camera");
 
-	m_engine->Get<Renderer>()->SetViewport(0, 0, 512, 512);
+	m_engine->Get<Renderer>()->SetViewport(0, 0, SHADOWMAP_SIZE, SHADOWMAP_SIZE);
 	m_engine->Get<Renderer>()->ClearBuffer();
 
-	auto model = Get<Model>("model1");
-	model->Draw();
+	Scene::Draw();
+	//auto model = Get<Model>("model1");
+	//model->Draw();
 
 	framebuffer->Unbind();
 }
 
-void FramebufferScene::RenderScene()
+void ShadowmapScene::RenderScene()
 {
 	SetActive<Camera>("camera");
 
 	m_engine->Get<Renderer>()->RestoreViewport();
 	m_engine->Get<Renderer>()->ClearBuffer();
 
-	auto model = Get<Model>("model2");
+	//Scene::Draw();
+	auto model = Get<Model>("model3");
 	model->Draw();
 }

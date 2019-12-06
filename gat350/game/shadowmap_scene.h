@@ -1,16 +1,16 @@
 #pragma once
 #include "../engine/framework/scene.h"
 
-class CubemapScene : public Scene
+class ShadowmapScene : public Scene
 {
 public:
-	OBJECT_DECLARATION(CubemapScene, Scene)
+	OBJECT_DECLARATION(ShadowmapScene, Scene)
 
 	bool Create(const Name& name) override;
 	void Update() override;
 	void Draw() override;
 
-public:
-	float m_index = 1.0f;
-	float m_mix = 1.0f;
+protected:
+	void RenderToTexture();
+	void RenderScene();
 };
