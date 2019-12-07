@@ -2,7 +2,7 @@
 
 in vec2 ftexcoord;
 
-layout (binding = 0) uniform sampler2D texture_sample;
+layout (binding = 1) uniform sampler2D texture_sample;
 
 out vec4 color;
 

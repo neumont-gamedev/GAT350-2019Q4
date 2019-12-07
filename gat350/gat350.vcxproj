@@ -243,6 +243,8 @@
     <None Include="builds\content\shaders\gouraud.vert" />
     <None Include="builds\content\shaders\phong.frag" />
     <None Include="builds\content\shaders\phong.vert" />
+    <None Include="builds\content\shaders\phong_shadow.frag" />
+    <None Include="builds\content\shaders\phong_shadow.vert" />
     <None Include="builds\content\shaders\reflection.frag" />
     <None Include="builds\content\shaders\reflection.vert" />
     <None Include="builds\content\shaders\shadowmap.frag" />
