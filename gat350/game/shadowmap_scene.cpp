@@ -162,9 +162,12 @@ bool ShadowmapScene::Create(const Name& name)
 		camera->m_scene = this;
 		camera->m_user_camera = false;
 		//camera->Create("buffer_camera");
-		camera->m_transform.translation = glm::vec3(0.0f, 0.0f, 5.0f);
-		camera->m_transform.rotation = glm::angleAxis(glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		camera->SetProjection(45.0f, 1.0f, 0.01f, 100.0f);
+		//camera->m_transform.translation = glm::vec3(0.0f, 0.0f, 5.0f);
+		//camera->m_transform.rotation = glm::angleAxis(glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		//camera->SetProjection(45.0f, 1.0f, 0.01f, 100.0f);
+		camera->m_view_matrix = glm::lookAt(glm::vec3(3), glm::vec3(0), glm::vec3(0, 1, 0));
+		camera->m_projection_matrix = glm::ortho(-10, 10, -10, 10, -10, 10);
+		
 		Add(std::move(camera));
 	}
 
